@@ -33,19 +33,19 @@ export async function POST(req: Request) {
       { expiresIn: "7d" }
     );
 
-    const response = NextResponse.redirect(new URL("/dashboard/admin/users", req.url), {
-      status: 303,
-    });
-
+    const response = NextResponse.next();
     response.cookies.set("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "lax",
       path: "/",
       maxAge: 60 * 60 * 24 * 7,
     });
 
-    return response;
+    return NextResponse.redirect(new URL("/dashboard/admin/users", req.url), {
+      status: 303,
+      headers: response.headers,
+    });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Erro interno no servidor." }, { status: 500 });
