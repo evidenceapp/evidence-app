@@ -4,19 +4,13 @@ import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUser,
-  faLock,
-  faRightToBracket,
-} from "@fortawesome/free-solid-svg-icons";
+import { faUser, faLock, faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { toast } from "react-toastify";
 import { ILoginForm } from "@/interfaces";
 
 gsap.registerPlugin(ScrollTrigger);
-
-
 
 const LoginPage = () => {
   const {
@@ -87,10 +81,7 @@ const LoginPage = () => {
         className="max-w-md w-full p-8 rounded-xl shadow-2xl login-animate"
         style={{ backgroundColor: "#ffffff", border: "1px solid #dcdcdc" }}
       >
-        <h2
-          className="text-3xl font-bold mb-6 text-center"
-          style={{ color: "#D1B046" }}
-        >
+        <h2 className="text-3xl font-bold mb-6 text-center" style={{ color: "#D1B046" }}>
           Login
         </h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -113,9 +104,7 @@ const LoginPage = () => {
               }}
             />
             {errors.username && (
-              <p className="mt-2 text-sm text-red-500">
-                {errors.username.message}
-              </p>
+              <p className="mt-2 text-sm text-red-500">{errors.username.message}</p>
             )}
           </div>
 
@@ -138,9 +127,7 @@ const LoginPage = () => {
               }}
             />
             {errors.password && (
-              <p className="mt-2 text-sm text-red-500">
-                {errors.password.message}
-              </p>
+              <p className="mt-2 text-sm text-red-500">{errors.password.message}</p>
             )}
           </div>
 
@@ -152,11 +139,7 @@ const LoginPage = () => {
           >
             {isSubmitting ? (
               <>
-                <FontAwesomeIcon
-                  icon={faRightToBracket}
-                  spin
-                  className="h-5 w-5"
-                />
+                <FontAwesomeIcon icon={faRightToBracket} spin className="h-5 w-5" />
                 Entrando...
               </>
             ) : (
@@ -167,11 +150,7 @@ const LoginPage = () => {
             )}
           </button>
 
-          {errorMessage && (
-            <p className="mt-4 text-center text-red-500 text-sm">
-              {errorMessage}
-            </p>
-          )}
+          {errorMessage && <p className="mt-4 text-center text-red-500 text-sm">{errorMessage}</p>}
         </form>
       </div>
     </section>

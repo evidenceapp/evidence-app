@@ -71,10 +71,7 @@ export const testimonials = Array.from({ length: 8 }, (_, i) => ({
   googleReviewUrl: "https://g.co/kgs/rUQaz1G",
 }));
 
-export const galeryImages = Array.from(
-  { length: 10 },
-  () => "/images/ft-1.jpg"
-);
+export const galeryImages = Array.from({ length: 10 }, () => "/images/ft-1.jpg");
 
 export const items = [
   {

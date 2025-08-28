@@ -10,10 +10,7 @@ export async function POST(req: Request) {
     const { username, password } = await req.json();
 
     if (!username || !password) {
-      return NextResponse.json(
-        { error: "Usuário e senha são obrigatórios." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Usuário e senha são obrigatórios." }, { status: 400 });
     }
 
     const user = await prisma.user.findUnique({
@@ -21,10 +18,7 @@ export async function POST(req: Request) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { error: "Usuário não encontrado." },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Usuário não encontrado." }, { status: 401 });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -38,9 +32,7 @@ export async function POST(req: Request) {
       { expiresIn: "7d" }
     );
 
-    const response = NextResponse.redirect(
-      new URL("/dashboard/admin/users", req.url)
-    );
+    const response = NextResponse.redirect(new URL("/dashboard/admin/users", req.url));
 
     response.cookies.set("token", token, {
       httpOnly: true,
@@ -53,9 +45,6 @@ export async function POST(req: Request) {
     return response;
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { error: "Erro interno no servidor." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Erro interno no servidor." }, { status: 500 });
   }
 }

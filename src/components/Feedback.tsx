@@ -54,18 +54,11 @@ const Feedback = () => {
       style={{ backgroundColor: "#f9f9f9" }}
     >
       <div className="relative z-10 text-center max-w-3xl mx-auto px-4">
-        <h2
-          className="text-5xl md:text-6xl font-extrabold mb-6"
-          style={{ color: "#4a4a4a" }}
-        >
+        <h2 className="text-5xl md:text-6xl font-extrabold mb-6" style={{ color: "#4a4a4a" }}>
           O Que Nossos Clientes Dizem
         </h2>
-        <p
-          className="text-lg md:text-xl leading-relaxed mb-16"
-          style={{ color: "#6d6d6d" }}
-        >
-          Confira alguns depoimentos reais de pessoas que confiaram em nosso
-          trabalho.
+        <p className="text-lg md:text-xl leading-relaxed mb-16" style={{ color: "#6d6d6d" }}>
+          Confira alguns depoimentos reais de pessoas que confiaram em nosso trabalho.
         </p>
       </div>
 
@@ -79,11 +72,15 @@ const Feedback = () => {
             ref={(el) => (cardsRef.current[index] = el!)}
             className="bg-white rounded-xl shadow-xl p-6 flex flex-col items-center text-center hover:scale-[1.02] transition-transform duration-500 cursor-pointer"
           >
-            <Image
-              src={t.image}
-              alt={t.alt}
-              className="w-24 h-24 rounded-full object-cover border-4 border-[#D1B046] mb-4 shadow-lg"
-            />
+            <div className="w-24 h-24 rounded-full border-4 border-[#D1B046] mb-4 shadow-lg relative">
+              <Image
+                src={t.image}
+                alt={t.alt}
+                fill
+                sizes="96px"
+                className="rounded-full object-cover"
+              />
+            </div>
             <div className="flex mb-3 space-x-1">
               {Array.from({ length: 5 }).map((_, i) => (
                 <div key={i} className="relative w-5 h-5">
@@ -109,7 +106,7 @@ const Feedback = () => {
                 </div>
               ))}
             </div>
-            <p className="text-gray-600 italic mb-4">"{t.feedback}"</p>
+            <p className="text-gray-600 italic mb-4">{`"${t.feedback}"`}</p>
             <p className="font-semibold" style={{ color: "#D1B046" }}>
               {t.name}
             </p>

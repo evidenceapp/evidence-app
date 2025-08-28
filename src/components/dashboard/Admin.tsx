@@ -1,13 +1,9 @@
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { IUser } from "@/interfaces";
-import {
-  faLock,
-  faPlus,
-  faTrash,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
+import { faLock, faPlus, faTrash, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const AdminDash = ({ usersList }: { usersList: IUser[] }) => {
@@ -50,9 +46,7 @@ const AdminDash = ({ usersList }: { usersList: IUser[] }) => {
             type="text"
             placeholder="Novo usuário"
             value={formData.username}
-            onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
             className="w-full px-4 py-2 rounded-lg border"
             style={{
               backgroundColor: "#f9f9f9",
@@ -66,9 +60,7 @@ const AdminDash = ({ usersList }: { usersList: IUser[] }) => {
             type="password"
             placeholder="Senha"
             value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             className="w-full px-4 py-2 rounded-lg border"
             style={{
               backgroundColor: "#f9f9f9",
@@ -100,7 +92,7 @@ const AdminDash = ({ usersList }: { usersList: IUser[] }) => {
               >
                 <div className="flex items-center space-x-2">
                   {user.instagramProfilePictureUrl && (
-                    <img
+                    <Image
                       src={user.instagramProfilePictureUrl}
                       alt={user.username}
                       className="w-8 h-8 rounded-full object-cover"

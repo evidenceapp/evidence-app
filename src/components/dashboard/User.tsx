@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -34,7 +35,7 @@ const UserDash = (user: IUser | null) => {
       {user?.instagramUsername && (
         <div className="flex flex-col items-center mb-6 user-animate">
           {user.instagramProfilePictureUrl && (
-            <img
+            <Image
               src={user.instagramProfilePictureUrl}
               alt="Instagram Avatar"
               className="rounded-full w-24 h-24 object-cover border-4 border-[#D1B046] mb-2"
@@ -45,9 +46,7 @@ const UserDash = (user: IUser | null) => {
             {user.instagramUsername}
           </p>
           {user.instagramAccountType && (
-            <p className="text-sm text-gray-600">
-              Tipo de conta: {user.instagramAccountType}
-            </p>
+            <p className="text-sm text-gray-600">Tipo de conta: {user.instagramAccountType}</p>
           )}
         </div>
       )}
@@ -70,9 +69,7 @@ const UserDash = (user: IUser | null) => {
             type="text"
             placeholder="Novo username"
             value={formData.username || user?.username || ""}
-            onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
             className="w-full px-4 py-2 rounded-lg border"
             style={{
               backgroundColor: "#f9f9f9",
@@ -86,9 +83,7 @@ const UserDash = (user: IUser | null) => {
             type="password"
             placeholder="Nova senha"
             value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             className="w-full px-4 py-2 rounded-lg border"
             style={{
               backgroundColor: "#f9f9f9",

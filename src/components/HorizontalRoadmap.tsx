@@ -27,14 +27,12 @@ const MetricsShowcase = () => {
     if (!section || !container || !lastItem) return;
 
     // Distância total do scroll horizontal
-    const scrollDistance =
-      lastItem.offsetLeft + lastItem.offsetWidth + 160 - window.innerWidth;
+    const scrollDistance = lastItem.offsetLeft + lastItem.offsetWidth + 160 - window.innerWidth;
 
     const trigger = ScrollTrigger.create({
       trigger: section,
       start: "top top",
-      end: () =>
-        `+=${lastItem.offsetLeft - (window.innerWidth - lastItem.offsetWidth)}`,
+      end: () => `+=${lastItem.offsetLeft - (window.innerWidth - lastItem.offsetWidth)}`,
       scrub: true,
       pin: true,
       anticipatePin: 1,
@@ -76,8 +74,8 @@ const MetricsShowcase = () => {
         Impacto da nossa Clínica
       </h2>
       <p className="text-sm md:text-lg text-center mt-6 max-w-xl mx-auto text-neutral-50">
-        Conheça os resultados e indicadores que destacam nosso cuidado e
-        compromisso com a sua saúde.
+        Conheça os resultados e indicadores que destacam nosso cuidado e compromisso com a sua
+        saúde.
       </p>
 
       <div
@@ -101,11 +99,7 @@ const MetricsShowcase = () => {
                 }}
                 className="flex justify-center items-center min-w-[20px]"
               >
-                <FontAwesomeIcon
-                  icon={faArrowRight}
-                  size="lg"
-                  style={{ color: "#D1B046" }}
-                />
+                <FontAwesomeIcon icon={faArrowRight} size="lg" style={{ color: "#D1B046" }} />
               </div>
             )}
           </div>

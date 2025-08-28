@@ -11,22 +11,16 @@ export async function GET() {
   });
 
   if (!user || !user.instagramAccessToken) {
-    return NextResponse.json(
-      { error: "No user with Instagram token found." },
-      { status: 404 }
-    );
+    return NextResponse.json({ error: "No user with Instagram token found." }, { status: 404 });
   }
 
   try {
-    const refreshRes = await axios.get(
-      "https://graph.instagram.com/refresh_access_token",
-      {
-        params: {
-          grant_type: "ig_refresh_token",
-          access_token: user.instagramAccessToken,
-        },
-      }
-    );
+    const refreshRes = await axios.get("https://graph.instagram.com/refresh_access_token", {
+      params: {
+        grant_type: "ig_refresh_token",
+        access_token: user.instagramAccessToken,
+      },
+    });
 
     const { access_token, expires_in } = refreshRes.data;
 
@@ -41,9 +35,6 @@ export async function GET() {
     });
   } catch (error: any) {
     console.error(error.response?.data || error);
-    return NextResponse.json(
-      { error: "Failed to refresh Instagram token." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to refresh Instagram token." }, { status: 500 });
   }
 }

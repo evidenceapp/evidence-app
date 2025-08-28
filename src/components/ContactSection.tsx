@@ -1,20 +1,24 @@
-import 'react-datepicker/dist/react-datepicker.css';
+import "react-datepicker/dist/react-datepicker.css";
 
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
-import { useEffect, useRef, useState } from 'react';
-import DatePicker from 'react-datepicker';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import { useEffect, useRef, useState } from "react";
+import DatePicker from "react-datepicker";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
-import { IFormData } from '@/interfaces';
-import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
+import { IFormData } from "@/interfaces";
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import {
-    faCalendarDays, faEnvelope, faPaperPlane, faPhone, faTag, faUser
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+  faCalendarDays,
+  faEnvelope,
+  faPaperPlane,
+  faPhone,
+  faTag,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 gsap.registerPlugin(ScrollTrigger);
-
 
 const painOptions = [
   { value: "", label: "Selecione uma opção" },
@@ -95,15 +99,12 @@ const ContactSection = () => {
               }}
               className="p-8 md:p-10 rounded-xl shadow-2xl"
             >
-              <h3
-                style={{ color: "#D1B046" }}
-                className="text-4xl font-extrabold mb-4"
-              >
+              <h3 style={{ color: "#D1B046" }} className="text-4xl font-extrabold mb-4">
                 Agendar consulta
               </h3>
               <p className="mb-8 text-lg">
-                Preencha o formulário abaixo para agendar uma consulta ou tirar
-                suas dúvidas. Retornaremos o contato em breve!
+                Preencha o formulário abaixo para agendar uma consulta ou tirar suas dúvidas.
+                Retornaremos o contato em breve!
               </p>
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -131,10 +132,7 @@ const ContactSection = () => {
                   <div key={idx} className="contact-animate">
                     <label className="block text-sm font-medium mb-2">
                       <div className="flex items-center gap-2">
-                        <FontAwesomeIcon
-                          icon={item.icon}
-                          style={{ color: "#D1B046" }}
-                        />
+                        <FontAwesomeIcon icon={item.icon} style={{ color: "#D1B046" }} />
                         {item.label}
                       </div>
                     </label>
@@ -153,10 +151,7 @@ const ContactSection = () => {
                     />
                     {errors[item.field as keyof IFormData] && (
                       <p className="mt-2 text-sm text-red-400">
-                        {
-                          errors[item.field as keyof IFormData]
-                            ?.message as string
-                        }
+                        {errors[item.field as keyof IFormData]?.message as string}
                       </p>
                     )}
                   </div>
@@ -166,10 +161,7 @@ const ContactSection = () => {
                 <div className="contact-animate">
                   <label className="block text-sm font-medium mb-2">
                     <div className="flex items-center gap-2">
-                      <FontAwesomeIcon
-                        icon={faCalendarDays}
-                        style={{ color: "#D1B046" }}
-                      />
+                      <FontAwesomeIcon icon={faCalendarDays} style={{ color: "#D1B046" }} />
                       Melhor dia para consulta
                     </div>
                   </label>
@@ -183,19 +175,12 @@ const ContactSection = () => {
                         onChange={(date: Date | null) => field.onChange(date)}
                         selected={field.value}
                         dateFormat="dd/MM/yyyy"
-                        className="w-full px-4 py-3 rounded-lg cursor-pointer"
-                        style={{
-                          backgroundColor: "#4a4a4a",
-                          border: "1px solid #6d6d6d",
-                          color: "#f9f9f9",
-                        }}
+                        className="w-full px-4 py-3 rounded-lg cursor-pointer bg-[#4a4a4a] border border-[#6d6d6d] text-[#f9f9f9]"
                       />
                     )}
                   />
                   {errors.consultationDate && (
-                    <p className="mt-2 text-sm text-red-400">
-                      {errors.consultationDate.message}
-                    </p>
+                    <p className="mt-2 text-sm text-red-400">{errors.consultationDate.message}</p>
                   )}
                 </div>
 
@@ -203,10 +188,7 @@ const ContactSection = () => {
                 <div className="contact-animate">
                   <label className="block text-sm font-medium mb-2">
                     <div className="flex items-center gap-2">
-                      <FontAwesomeIcon
-                        icon={faTag}
-                        style={{ color: "#D1B046" }}
-                      />
+                      <FontAwesomeIcon icon={faTag} style={{ color: "#D1B046" }} />
                       Área da Dor / Assunto
                     </div>
                   </label>
@@ -228,17 +210,13 @@ const ContactSection = () => {
                     ))}
                   </select>
                   {errors.painArea && (
-                    <p className="mt-2 text-sm text-red-400">
-                      {errors.painArea.message}
-                    </p>
+                    <p className="mt-2 text-sm text-red-400">{errors.painArea.message}</p>
                   )}
                 </div>
 
                 {/* Mensagem */}
                 <div className="contact-animate">
-                  <label className="block text-sm font-medium mb-2">
-                    Sua Mensagem / Descrição
-                  </label>
+                  <label className="block text-sm font-medium mb-2">Sua Mensagem / Descrição</label>
                   <textarea
                     rows={4}
                     {...register("description", {
@@ -253,9 +231,7 @@ const ContactSection = () => {
                     }}
                   ></textarea>
                   {errors.description && (
-                    <p className="mt-2 text-sm text-red-400">
-                      {errors.description.message}
-                    </p>
+                    <p className="mt-2 text-sm text-red-400">{errors.description.message}</p>
                   )}
                 </div>
 
@@ -268,11 +244,7 @@ const ContactSection = () => {
                 >
                   {isSubmitting ? (
                     <>
-                      <FontAwesomeIcon
-                        icon={faPaperPlane}
-                        spin
-                        className="h-5 w-5"
-                      />
+                      <FontAwesomeIcon icon={faPaperPlane} spin className="h-5 w-5" />
                       Enviando...
                     </>
                   ) : (
@@ -285,14 +257,12 @@ const ContactSection = () => {
 
                 {submissionSuccess && (
                   <p className="mt-4 text-center text-green-400 text-lg">
-                    Mensagem enviada com sucesso! Em breve entraremos em
-                    contato.
+                    Mensagem enviada com sucesso! Em breve entraremos em contato.
                   </p>
                 )}
                 {submissionError && (
                   <p className="mt-4 text-center text-red-400 text-lg">
-                    Ocorreu um erro ao enviar a mensagem. Por favor, tente
-                    novamente.
+                    Ocorreu um erro ao enviar a mensagem. Por favor, tente novamente.
                   </p>
                 )}
               </form>

@@ -1,8 +1,9 @@
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useEffect, useRef, useState } from 'react';
+import Image from "next/image";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useRef, useState } from "react";
 
-import { galeryImages } from '../mocks/index';
+import { galeryImages } from "../mocks/index";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -104,8 +105,7 @@ const Galery = () => {
             className="showroom-description text-lg sm:text-xl mb-12 max-w-3xl mx-auto"
             style={{ color: "#f9f9f9" }}
           >
-            Conheça nossa estrutura e momentos que vivenciamos com nossos
-            pacientes.
+            Conheça nossa estrutura e momentos que vivenciamos com nossos pacientes.
           </p>
 
           <div className="gallery-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[200px]">
@@ -117,9 +117,10 @@ const Galery = () => {
                 } gallery-image`}
                 onClick={() => setSelectedImage(src)}
               >
-                <img
+                <Image
                   src={src}
                   alt={`Galeria ${index + 1}`}
+                  fill
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
@@ -133,7 +134,7 @@ const Galery = () => {
           className="fixed inset-0 flex items-center justify-center z-50 p-4 backdrop-blur-sm bg-black/40"
           onClick={() => setSelectedImage(null)}
         >
-          <img
+          <Image
             src={selectedImage}
             alt="Visualização ampliada"
             className="max-w-[80%] max-h-[80%] rounded-lg shadow-xl transition-transform duration-300"

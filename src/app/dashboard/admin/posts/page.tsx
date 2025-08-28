@@ -35,10 +35,7 @@ export default function PostsPage() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-start p-6 sm:p-8 bg-[#f9f9f9] text-[#4a4a4a]">
       <div className="w-full max-w-3xl text-center mb-8 space-y-2 px-4">
-        <FontAwesomeIcon
-          icon={faPenFancy}
-          className="text-4xl text-[#D1B046] animate-bounce"
-        />
+        <FontAwesomeIcon icon={faPenFancy} className="text-4xl text-[#D1B046] animate-bounce" />
         <h1 className="text-2xl sm:text-3xl font-bold">
           Olá <span className="text-[#D1B046]">{currentUser.username}</span>,
         </h1>

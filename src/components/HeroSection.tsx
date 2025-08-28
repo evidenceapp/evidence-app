@@ -1,8 +1,8 @@
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
-import { useEffect, useRef } from 'react';
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import { useEffect, useRef } from "react";
 
-import { IHeroSection } from '@/interfaces';
+import { IHeroSection } from "@/interfaces";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -42,9 +42,7 @@ const HeroSection = ({ name, slogan, backgroundImage }: IHeroSection) => {
       className={`w-full flex flex-col lg:flex-row justify-center items-center py-24 px-6 hero relative text-center lg:text-left h-[600px]`}
       style={{
         backgroundColor: "#f9f9f9",
-        backgroundImage: backgroundImage
-          ? `url(${backgroundImage})`
-          : undefined,
+        backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}

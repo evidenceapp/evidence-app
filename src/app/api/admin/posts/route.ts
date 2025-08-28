@@ -25,8 +25,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Content is required" }, { status: 400 });
   }
 
-
-  const userId = body.userId || req.headers.get("x-user-id"); 
+  const userId = body.userId || req.headers.get("x-user-id");
 
   if (!userId) {
     return NextResponse.json({ error: "User ID is required" }, { status: 400 });
@@ -47,10 +46,7 @@ export async function PUT(req: NextRequest) {
   const { id, content } = body;
 
   if (!id || !content) {
-    return NextResponse.json(
-      { error: "ID and content are required" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "ID and content are required" }, { status: 400 });
   }
 
   const updated = await prisma.post.update({

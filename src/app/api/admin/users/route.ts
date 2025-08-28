@@ -2,24 +2,24 @@ import { PrismaClient } from "@/generated/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import axios from "axios";
+// import axios from "axios";
 
 const prisma = new PrismaClient();
 
-async function fetchInstagramProfile(accessToken: string) {
-  try {
-    const res = await axios.get(
-      `https://graph.instagram.com/me?fields=id,username,account_type,profile_picture_url&access_token=${accessToken}`
-    );
-    return res.data;
-  } catch (error) {
-    console.error(
-      "Erro ao buscar dados do Instagram:",
-      (error as any).response?.data || error
-    );
-    return null;
-  }
-}
+// async function fetchInstagramProfile(accessToken: string) {
+//   try {
+//     const res = await axios.get(
+//       `https://graph.instagram.com/me?fields=id,username,account_type,profile_picture_url&access_token=${accessToken}`
+//     );
+//     return res.data;
+//   } catch (error) {
+//     console.error(
+//       "Erro ao buscar dados do Instagram:",
+//       (error as any).response?.data || error
+//     );
+//     return null;
+//   }
+// }
 
 function getToken(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  let currentUser = await prisma.user.findUnique({
+  const currentUser = await prisma.user.findUnique({
     where: { id: decoded.userId },
     select: {
       id: true,
@@ -96,7 +96,12 @@ export async function GET(req: NextRequest) {
           not: "admin",
         },
       },
-      select: { id: true, username: true, instagramProfilePictureUrl: true, instagramUsername: true },
+      select: {
+        id: true,
+        username: true,
+        instagramProfilePictureUrl: true,
+        instagramUsername: true,
+      },
     });
     return NextResponse.json({ users, currentUser });
   }
@@ -110,13 +115,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { username, password, role } = await req.json();
+  const { username, password } = await req.json();
 
   if (!username || !password) {
-    return NextResponse.json(
-      { error: "Username and password are required" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Username and password are required" }, { status: 400 });
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -153,10 +155,7 @@ export async function DELETE(req: NextRequest) {
   }
 
   if (userToDelete.role === "admin") {
-    return NextResponse.json(
-      { error: "Você não pode excluir um administrador." },
-      { status: 403 }
-    );
+    return NextResponse.json({ error: "Você não pode excluir um administrador." }, { status: 403 });
   }
 
   await prisma.user.delete({

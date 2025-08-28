@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect, useRef, useState } from "react";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const ScrollDownHint = () => {
   const [show, setShow] = useState(false);
@@ -15,14 +14,24 @@ const ScrollDownHint = () => {
 
       scrollTimeout.current = setTimeout(() => {
         const sections = document.querySelectorAll("section");
-        for (let i = 0; i < sections.length; i++) {
-          const rect = sections[i].getBoundingClientRect();
-          if (rect.top > window.innerHeight * 0.2) {
-            setShow(true);
-            break;
+
+        let shouldShow = false;
+
+        // Esconder caso o usuário esteja no final da página
+        const isAtBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 20;
+
+        if (!isAtBottom) {
+          for (let i = 0; i < sections.length; i++) {
+            const rect = sections[i].getBoundingClientRect();
+            if (rect.top > window.innerHeight * 0.2) {
+              shouldShow = true;
+              break;
+            }
           }
         }
-      }, 1200);
+
+        setShow(shouldShow);
+      }, 800);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -61,7 +70,8 @@ const ScrollDownHint = () => {
 
       <style jsx global>{`
         @keyframes bounce-slow {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0);
           }
           50% {

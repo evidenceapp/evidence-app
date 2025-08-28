@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const WhatsappFloatingButton = () => {
   const [visible, setVisible] = useState(false);
@@ -12,7 +12,7 @@ const WhatsappFloatingButton = () => {
   }, []);
 
   const handleClick = () => {
-    window.open("https://wa.me/553496820404", "_blank"); 
+    window.open("https://wa.me/553496820404", "_blank");
   };
 
   return (

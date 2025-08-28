@@ -2,11 +2,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef } from "react";
 
-import {
-  faFacebook,
-  faInstagram,
-  faWhatsapp,
-} from "@fortawesome/free-brands-svg-icons";
+import { faFacebook, faInstagram, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { faMapMarkerAlt, faPhone } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -63,9 +59,7 @@ const Footer = () => {
 
         {/* Centro */}
         <div className="footer-animate">
-          <h4 className="text-lg font-semibold text-[#D1B046] mb-2">
-            Especialidades
-          </h4>
+          <h4 className="text-lg font-semibold text-[#D1B046] mb-2">Especialidades</h4>
           <ul className="space-y-1">
             {specialties.map((item, idx) => (
               <li key={idx} className="text-[#f9f9f9]">
@@ -77,9 +71,7 @@ const Footer = () => {
 
         {/* Direita */}
         <div className="footer-animate flex flex-col gap-3">
-          <h4 className="text-lg font-semibold text-[#D1B046]">
-            Contato e Localização
-          </h4>
+          <h4 className="text-lg font-semibold text-[#D1B046]">Contato e Localização</h4>
           <div className="flex items-center gap-2 text-[#f9f9f9]">
             <FontAwesomeIcon icon={faMapMarkerAlt} />
             <span>Rua Exemplo, 123 - Uberlândia</span>
@@ -123,8 +115,7 @@ const Footer = () => {
       </div>
 
       <p className="mt-10 text-center text-sm text-[#f9f9f9] footer-animate">
-        © {new Date().getFullYear()} Evidence Instituto Clínico. Todos os
-        direitos reservados.
+        © {new Date().getFullYear()} Evidence Instituto Clínico. Todos os direitos reservados.
       </p>
     </footer>
   );

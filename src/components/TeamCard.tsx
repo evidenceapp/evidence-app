@@ -2,12 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { ITeamCardProps as TeamCardProps } from "@/interfaces";
 
-const TeamCard: React.FC<TeamCardProps> = ({
-  name,
-  description,
-  instagram,
-  image,
-}) => {
+const TeamCard: React.FC<TeamCardProps> = ({ name, description, instagram, image }) => {
   return (
     <div className="relative w-64 h-96 rounded-xl overflow-hidden shadow-lg group">
       <Image

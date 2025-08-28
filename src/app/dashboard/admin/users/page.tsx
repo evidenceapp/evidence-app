@@ -63,20 +63,11 @@ export default function UsersPage() {
         className="max-w-md w-full p-8 rounded-xl shadow-2xl user-animate"
         style={{ backgroundColor: "#ffffff", border: "1px solid #dcdcdc" }}
       >
-        <h1
-          className="text-3xl font-bold mb-6 text-center"
-          style={{ color: "#D1B046" }}
-        >
+        <h1 className="text-3xl font-bold mb-6 text-center" style={{ color: "#D1B046" }}>
           Gerenciamento de Usuários
         </h1>
 
-        {currentUser ? (
-          isAdmin ? null : (
-            <UserDash {...currentUser} />
-          )
-        ) : (
-          <Loading />
-        )}
+        {currentUser ? isAdmin ? null : <UserDash {...currentUser} /> : <Loading />}
 
         {isAdmin && <AdminDash usersList={users} />}
       </div>

@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import { IPost, IUserPostsProps } from '@/interfaces';
-import { extractVideoId } from '@/utils';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import { faCheck, faPen, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IPost, IUserPostsProps } from "@/interfaces";
+import { extractVideoId } from "@/utils";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import { faCheck, faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const UserPosts = ({ userId }: IUserPostsProps) => {
   const [posts, setPosts] = useState<IPost[]>([]);
@@ -84,9 +84,7 @@ const UserPosts = ({ userId }: IUserPostsProps) => {
                 <CKEditor
                   editor={ClassicEditor}
                   data={editingContent}
-                  onChange={(event, editor) =>
-                    setEditingContent(editor.getData())
-                  }
+                  onChange={(event, editor) => setEditingContent(editor.getData())}
                 />
                 <button
                   onClick={saveEdit}

@@ -1,8 +1,8 @@
 "use client";
-
+import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { toast } from "react-toastify";
 
 import Loading from "@/app/Loading";
@@ -12,6 +12,10 @@ import { faClock, faShareAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 gsap.registerPlugin(ScrollTrigger);
+
+interface PostsResponse {
+  posts: Post[];
+}
 
 const PostsSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -24,17 +28,13 @@ const PostsSection = () => {
   const take = 4;
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    loadPosts();
-  }, []);
 
+  // Animação de posts
   useEffect(() => {
     if (!sectionRef.current) return;
     const ctx = gsap.context(() => {
       const elements = gsap.utils.toArray(".post-animate");
-      elements.forEach((el: any, idx) => {
+      elements.forEach((el: Element, idx) => {
         gsap.fromTo(
           el,
           { y: 40, opacity: 0 },
@@ -56,16 +56,47 @@ const PostsSection = () => {
     return () => ctx.revert();
   }, [posts]);
 
+  // Função para carregar posts
+  const loadPosts = useCallback(async () => {
+    if (isLoading) return;
+    setIsLoading(true);
+
+    try {
+      const res = await fetch(`/api/public/posts?skip=${skip}&take=${take}`);
+      const data: PostsResponse = await res.json();
+
+      if (data.posts.length < take || data.posts.length === 0) {
+        setHasMore(false);
+      }
+
+      setPosts((prev) => [...prev, ...data.posts]);
+
+      // Agora tipamos corretamente como Set<string>
+      const uniqueAuthors: Set<string> = new Set(
+        data.posts.map((p: Post) => p.author.instagramUsername)
+      );
+
+      setAuthors((prev: string[]) => Array.from(new Set([...prev, ...uniqueAuthors])));
+
+      if (skip === 0) {
+        setActiveAuthors(new Set([...uniqueAuthors]));
+      }
+
+      setSkip((prev) => prev + take);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isLoading, skip, take]);
+
+  // Scroll infinito
   useEffect(() => {
     const grid = gridRef.current;
     if (!grid) return;
 
     const handleScroll = () => {
-      if (
-        grid.scrollTop + grid.clientHeight >= grid.scrollHeight - 100 &&
-        hasMore &&
-        !isLoading
-      ) {
+      if (grid.scrollTop + grid.clientHeight >= grid.scrollHeight - 100 && hasMore && !isLoading) {
         loadPosts();
       }
     };
@@ -74,34 +105,14 @@ const PostsSection = () => {
     handleScroll();
 
     return () => grid.removeEventListener("scroll", handleScroll);
-  }, [hasMore, isLoading]);
+  }, [hasMore, isLoading, loadPosts]);
 
-  const loadPosts = async () => {
-    if (isLoading) return;
-    setIsLoading(true);
+  // Carrega posts iniciais
+  useEffect(() => {
+    loadPosts();
+  }, [loadPosts]);
 
-    const res = await fetch(`/api/public/posts?skip=${skip}&take=${take}`);
-    const data = await res.json();
-
-    if (data.posts.length < take || data.posts.length === 0) {
-      setHasMore(false);
-    }
-
-    setPosts((prev) => [...prev, ...data.posts]);
-
-    const uniqueAuthors = new Set(
-      data.posts.map((p: Post) => p.author.instagramUsername)
-    );
-    setAuthors((prev) => Array.from(new Set([...prev, ...uniqueAuthors])));
-
-    if (skip === 0) {
-      setActiveAuthors(new Set([...uniqueAuthors]));
-    }
-
-    setSkip((prev) => prev + take);
-    setIsLoading(false);
-  };
-
+  // Alternar autor
   const toggleAuthor = (username: string) => {
     setActiveAuthors((prev) => {
       const newSet = new Set(prev);
@@ -114,10 +125,9 @@ const PostsSection = () => {
     });
   };
 
-  const filteredPosts = posts.filter((post) =>
-    activeAuthors.has(post.author.instagramUsername)
-  );
+  const filteredPosts = posts.filter((post) => activeAuthors.has(post.author.instagramUsername));
 
+  // Carregar post específico via query param
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const postId = params.get("post");
@@ -151,21 +161,19 @@ const PostsSection = () => {
           Novidades em Ciência e Saúde
         </h2>
         <p className="text-base md:text-lg text-center mb-8 max-w-xl mx-auto">
-          Acompanhe os conteúdos, descobertas e práticas que transformam a saúde
-          e a ciência.
+          Acompanhe os conteúdos, descobertas e práticas que transformam a saúde e a ciência.
         </p>
 
         <div className="flex flex-wrap justify-center gap-3 mb-8">
           {authors.map((username) => {
-            const authorPost = posts.find(
-              (p) => p.author.instagramUsername === username
-            );
+            const authorPost = posts.find((p) => p.author.instagramUsername === username);
             if (!authorPost) return null;
             return (
-              <img
+              <Image
                 key={username}
                 src={authorPost.author.instagramProfilePictureUrl}
                 alt={username}
+                fill
                 className={`w-12 h-12 rounded-full object-cover border cursor-pointer transition-opacity duration-300 ${
                   activeAuthors.has(username) ? "opacity-100" : "opacity-30"
                 }`}
@@ -187,23 +195,17 @@ const PostsSection = () => {
                 setSelectedPost(post);
                 const params = new URLSearchParams(window.location.search);
                 params.set("post", post.id);
-                window.history.pushState(
-                  {},
-                  "",
-                  `${window.location.pathname}?${params}`
-                );
+                window.history.pushState({}, "", `${window.location.pathname}?${params}`);
               }}
             >
               <div className="flex items-center gap-3 mb-3">
-                <img
+                <Image
                   src={post.author.instagramProfilePictureUrl}
                   alt={post.author.instagramUsername}
                   className="w-10 h-10 rounded-full object-cover border border-gray-300"
                 />
                 <div>
-                  <span className="font-semibold">
-                    @{post.author.instagramUsername}
-                  </span>
+                  <span className="font-semibold">@{post.author.instagramUsername}</span>
                   <div className="flex items-center gap-1 text-gray-500 text-xs">
                     <FontAwesomeIcon icon={faClock} />
                     <span>{new Date(post.createdAt).toLocaleString()}</span>
@@ -246,11 +248,7 @@ const PostsSection = () => {
             setSelectedPost(null);
             const params = new URLSearchParams(window.location.search);
             params.delete("post");
-            window.history.pushState(
-              {},
-              "",
-              `${window.location.pathname}?${params}`
-            );
+            window.history.pushState({}, "", `${window.location.pathname}?${params}`);
           }}
         >
           <div
@@ -258,20 +256,16 @@ const PostsSection = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center gap-4 mb-4">
-              <img
+              <Image
                 src={selectedPost.author.instagramProfilePictureUrl}
                 alt={selectedPost.author.instagramUsername}
                 className="w-12 h-12 rounded-full object-cover border"
               />
               <div>
-                <span className="font-semibold">
-                  @{selectedPost.author.instagramUsername}
-                </span>
+                <span className="font-semibold">@{selectedPost.author.instagramUsername}</span>
                 <div className="flex items-center gap-1 text-gray-500 text-xs">
                   <FontAwesomeIcon icon={faClock} />
-                  <span>
-                    {new Date(selectedPost.createdAt).toLocaleString()}
-                  </span>
+                  <span>{new Date(selectedPost.createdAt).toLocaleString()}</span>
                 </div>
               </div>
             </div>

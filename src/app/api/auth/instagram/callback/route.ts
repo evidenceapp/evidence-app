@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@/generated/prisma";
 import axios from "axios";
-import jwt from "jsonwebtoken";
+// import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
@@ -16,10 +16,7 @@ export async function GET(req: NextRequest) {
   // const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;
 
   if (!code) {
-    return NextResponse.json(
-      { error: "Código não encontrado." },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Código não encontrado." }, { status: 400 });
   }
 
   try {
@@ -31,15 +28,12 @@ export async function GET(req: NextRequest) {
     let access_token: string;
 
     if (existingUser?.instagramAccessToken) {
-      const refreshRes = await axios.get(
-        "https://graph.instagram.com/refresh_access_token",
-        {
-          params: {
-            grant_type: "ig_refresh_token",
-            access_token: existingUser.instagramAccessToken,
-          },
-        }
-      );
+      const refreshRes = await axios.get("https://graph.instagram.com/refresh_access_token", {
+        params: {
+          grant_type: "ig_refresh_token",
+          access_token: existingUser.instagramAccessToken,
+        },
+      });
       access_token = refreshRes.data.access_token;
     } else {
       const tokenRes = await axios.post(
@@ -55,16 +49,13 @@ export async function GET(req: NextRequest) {
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
         }
       );
-      const exchangeRes = await axios.get(
-        "https://graph.instagram.com/access_token",
-        {
-          params: {
-            grant_type: "ig_exchange_token",
-            client_secret: process.env.INSTAGRAM_CLIENT_SECRET!,
-            access_token: tokenRes.data.access_token,
-          },
-        }
-      );
+      const exchangeRes = await axios.get("https://graph.instagram.com/access_token", {
+        params: {
+          grant_type: "ig_exchange_token",
+          client_secret: process.env.INSTAGRAM_CLIENT_SECRET!,
+          access_token: tokenRes.data.access_token,
+        },
+      });
 
       access_token = exchangeRes.data.access_token;
     }
@@ -85,9 +76,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect(
       new URL(
         "/dashboard/admin/users",
-        process.env.NODE_ENV === "development"
-          ? "http://localhost:3000/"
-          : req.url
+        process.env.NODE_ENV === "development" ? "http://localhost:3000/" : req.url
       )
     );
   } catch (error) {

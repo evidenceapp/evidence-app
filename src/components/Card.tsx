@@ -1,7 +1,7 @@
-import Image from 'next/image';
-import { useState } from 'react';
+import Image from "next/image";
+import { useState } from "react";
 
-import { ICard } from '@/interfaces';
+import { ICard } from "@/interfaces";
 
 const Card = ({ title, description, image, isLast, lastItemRef }: ICard) => {
   const [hover, setHover] = useState(false);
@@ -17,16 +17,8 @@ const Card = ({ title, description, image, isLast, lastItemRef }: ICard) => {
           hover ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"
         }`}
       >
-        <Image
-          src={image}
-          alt={title}
-          width={80}
-          height={80}
-          className="object-contain mb-4"
-        />
-        <h2 className="text-lg md:text-2xl font-bold text-center text-neutral-700">
-          {title}
-        </h2>
+        <Image src={image} alt={title} width={80} height={80} className="object-contain mb-4" />
+        <h2 className="text-lg md:text-2xl font-bold text-center text-neutral-700">{title}</h2>
       </div>
 
       <div
@@ -35,9 +27,7 @@ const Card = ({ title, description, image, isLast, lastItemRef }: ICard) => {
         }`}
         style={{ backgroundColor: "#D1B046", color: "#4a4a4a" }}
       >
-        <p className="text-xs md:text-base leading-relaxed text-center">
-          {description}
-        </p>
+        <p className="text-xs md:text-base leading-relaxed text-center">{description}</p>
       </div>
     </div>
   );

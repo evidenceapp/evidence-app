@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { INavLink } from '@/interfaces';
+import { INavLink } from "@/interfaces";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -19,7 +19,7 @@ const Header = () => {
   const handleScroll = (id: string) => {
     const section = document.getElementById(id);
     if (section) {
-      const yOffset = -50; 
+      const yOffset = -50;
       const y = section.getBoundingClientRect().top + window.scrollY + yOffset;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
@@ -31,11 +31,7 @@ const Header = () => {
     >
       <div className="container w-[70%] mx-auto flex justify-between items-center">
         <div className="flex-shrink-0">
-          <a
-            href="#"
-            className="text-2xl font-bold tracking-wide"
-            style={{ color: "#D1B046" }}
-          >
+          <a href="#" className="text-2xl font-bold tracking-wide" style={{ color: "#D1B046" }}>
             Evidence
           </a>
         </div>
