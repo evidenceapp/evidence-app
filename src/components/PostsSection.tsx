@@ -210,11 +210,15 @@ const PostsSection = () => {
                 style={{ maxHeight: "280px" }}
                 dangerouslySetInnerHTML={{
                   __html: post.content.replace(
-                    /<oembed url="(.*?)"><\/oembed>/g,
-                    (_, url) =>
-                      `<iframe style="width: 100%; aspect-ratio: 16/9; border-radius: 0.5rem;" src="https://www.youtube.com/embed/${extractVideoId(
-                        url
-                      )}" frameborder="0" allowfullscreen></iframe>`
+                    /<a[^>]+href=["']?(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})).*?<\/a>/g,
+                    (_, url, videoId) => `
+        <iframe
+          style="width: 100%; aspect-ratio: 16/9; border-radius: 0.5rem;"
+          src="https://www.youtube.com/embed/${videoId}"
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+      `
                   ),
                 }}
               />
@@ -276,13 +280,29 @@ const PostsSection = () => {
             <div
               className="prose prose-neutral max-w-none text-sm text-[#4a4a4a]"
               dangerouslySetInnerHTML={{
-                __html: selectedPost.content.replace(
-                  /<oembed url="(.*?)"><\/oembed>/g,
-                  (_, url) =>
-                    `<iframe style="width: 100%; aspect-ratio: 16/9; border-radius: 0.5rem;" src="https://www.youtube.com/embed/${extractVideoId(
-                      url
-                    )}" frameborder="0" allowfullscreen></iframe>`
-                ),
+                __html: selectedPost.content
+                  .replace(/<oembed url=["']?(.*?)["']?><\/oembed>/g, (_, url) => {
+                    const videoId = extractVideoId(url);
+                    if (!videoId) return `<a href="${url}" target="_blank">${url}</a>`;
+                    return `
+          <iframe
+            style="width: 100%; aspect-ratio: 16/9; border-radius: 0.5rem;"
+            src="https://www.youtube.com/embed/${videoId}"
+            frameborder="0"
+            allowfullscreen
+          ></iframe>`;
+                  })
+                  .replace(
+                    /<a[^>]+href=["']?(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})).*?<\/a>/g,
+                    (_, url, videoId) => `
+        <iframe
+          style="width: 100%; aspect-ratio: 16/9; border-radius: 0.5rem;"
+          src="https://www.youtube.com/embed/${videoId}"
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+      `
+                  ),
               }}
             />
           </div>

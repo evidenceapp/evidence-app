@@ -46,8 +46,7 @@ const TiptapEditor = ({ value, onChange }: Props) => {
     immediatelyRender: false,
     editorProps: {
       attributes: {
-        class:
-          "prose prose-sm max-w-none p-4 min-h-[200px] focus:outline-none text-gray-900",
+        class: "prose prose-sm max-w-none p-4 min-h-[200px] focus:outline-none text-gray-900",
       },
     },
     onUpdate: ({ editor }) => {
@@ -114,9 +113,7 @@ const TiptapEditor = ({ value, onChange }: Props) => {
         <button
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
           className={`p-1.5 rounded hover:bg-gray-200 ${
-            editor.isActive("heading", { level: 1 })
-              ? "bg-yellow-200 text-yellow-800"
-              : ""
+            editor.isActive("heading", { level: 1 }) ? "bg-yellow-200 text-yellow-800" : ""
           }`}
         >
           <Heading1 size={16} />
@@ -126,9 +123,7 @@ const TiptapEditor = ({ value, onChange }: Props) => {
         <button
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           className={`p-1.5 rounded hover:bg-gray-200 ${
-            editor.isActive("heading", { level: 2 })
-              ? "bg-yellow-200 text-yellow-800"
-              : ""
+            editor.isActive("heading", { level: 2 }) ? "bg-yellow-200 text-yellow-800" : ""
           }`}
         >
           <Heading2 size={16} />
@@ -136,13 +131,7 @@ const TiptapEditor = ({ value, onChange }: Props) => {
 
         {/* Link */}
         <button
-          onClick={() =>
-            editor
-              .chain()
-              .focus()
-              .toggleLink({ href: "https://" })
-              .run()
-          }
+          onClick={() => editor.chain().focus().toggleLink({ href: "https://" }).run()}
           className={`p-1.5 rounded hover:bg-gray-200 ${
             editor.isActive("link") ? "bg-yellow-200 text-yellow-800" : ""
           }`}
@@ -151,10 +140,7 @@ const TiptapEditor = ({ value, onChange }: Props) => {
         </button>
 
         {/* Unlink */}
-        <button
-          onClick={unsetLink}
-          className="p-1.5 rounded hover:bg-gray-200"
-        >
+        <button onClick={unsetLink} className="p-1.5 rounded hover:bg-gray-200">
           <Unlink size={16} />
         </button>
 
