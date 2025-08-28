@@ -2,15 +2,14 @@
 import dynamic from "next/dynamic";
 
 import { useEffect, useState } from "react";
-
-const UserPosts = dynamic(() => import("@/components/TextEditor"), {
-  ssr: false,
-  loading: () => <p>Carregando editor...</p>,
-});
 import Loading from "@/app/Loading";
 import { IUser as User } from "@/interfaces";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenFancy } from "@fortawesome/free-solid-svg-icons";
+const UserPosts = dynamic(() => import("@/components/TextEditor"), {
+  ssr: false,
+  loading: () => <p>Carregando editor...</p>,
+});
 
 export default function PostsPage() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);

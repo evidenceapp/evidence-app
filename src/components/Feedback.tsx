@@ -8,7 +8,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Feedback = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<HTMLDivElement[]>([]);
+  const cardsRef = useRef<(HTMLAnchorElement | null)[]>([]);
 
   useEffect(() => {
     cardsRef.current.forEach((card) => {
@@ -69,7 +69,9 @@ const Feedback = () => {
             href={t.googleReviewUrl}
             target="_blank"
             rel="noopener noreferrer"
-            ref={(el) => (cardsRef.current[index] = el!)}
+            ref={(el) => {
+              cardsRef.current[index] = el;
+            }}
             className="bg-white rounded-xl shadow-xl p-6 flex flex-col items-center text-center hover:scale-[1.02] transition-transform duration-500 cursor-pointer"
           >
             <div className="w-24 h-24 rounded-full border-4 border-[#D1B046] mb-4 shadow-lg relative">

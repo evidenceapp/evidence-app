@@ -3,25 +3,29 @@ import { PrismaClient } from "@/generated/prisma";
 
 const prisma = new PrismaClient();
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-  const { id } = params;
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params;
 
-  const post = await prisma.post.findUnique({
-    where: { id },
-    include: {
-      author: {
-        select: {
-          username: true,
-          instagramUsername: true,
-          instagramProfilePictureUrl: true,
+  try {
+    const post = await prisma.post.findUnique({
+      where: { id },
+      include: {
+        author: {
+          select: {
+            username: true,
+            instagramUsername: true,
+            instagramProfilePictureUrl: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  if (!post) {
-    return NextResponse.json({ error: "Post not found" }, { status: 404 });
+    if (!post) {
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ post });
+  } catch {
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
-
-  return NextResponse.json({ post });
 }
