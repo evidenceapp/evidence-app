@@ -34,7 +34,7 @@ const PostsSection = () => {
     if (!sectionRef.current) return;
     const ctx = gsap.context(() => {
       const elements = gsap.utils.toArray(".post-animate");
-      elements.forEach((el: Element, idx) => {
+      elements.forEach((el: any, idx) => {
         gsap.fromTo(
           el,
           { y: 40, opacity: 0 },
@@ -58,7 +58,7 @@ const PostsSection = () => {
 
   // Função para carregar posts
   const loadPosts = useCallback(async () => {
-    if (isLoading) return;
+    if (isLoading || !hasMore) return;
     setIsLoading(true);
 
     try {
@@ -71,7 +71,6 @@ const PostsSection = () => {
 
       setPosts((prev) => [...prev, ...data.posts]);
 
-      // Agora tipamos corretamente como Set<string>
       const uniqueAuthors: Set<string> = new Set(
         data.posts.map((p: Post) => p.author.instagramUsername)
       );
@@ -88,7 +87,7 @@ const PostsSection = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [isLoading, skip, take]);
+  }, [isLoading, skip, take, hasMore]);
 
   // Scroll infinito
   useEffect(() => {
@@ -96,21 +95,22 @@ const PostsSection = () => {
     if (!grid) return;
 
     const handleScroll = () => {
-      if (grid.scrollTop + grid.clientHeight >= grid.scrollHeight - 100 && hasMore && !isLoading) {
+      const bottom = grid.scrollTop + grid.clientHeight >= grid.scrollHeight - 100;
+      if (bottom && hasMore && !isLoading) {
         loadPosts();
       }
     };
 
     grid.addEventListener("scroll", handleScroll);
-    handleScroll();
-
     return () => grid.removeEventListener("scroll", handleScroll);
   }, [hasMore, isLoading, loadPosts]);
 
-  // Carrega posts iniciais
+  // Carregar posts iniciais apenas uma vez
   useEffect(() => {
-    loadPosts();
-  }, [loadPosts]);
+    if (posts.length === 0 && !isLoading) {
+      loadPosts();
+    }
+  }, [loadPosts, posts.length, isLoading]);
 
   // Alternar autor
   const toggleAuthor = (username: string) => {
