@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { IPost, IUserPostsProps } from "@/interfaces";
+import TiptapEditor from "@/components/TiptapEditor";
 import { extractVideoId } from "@/utils";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { faCheck, faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -68,11 +67,8 @@ const UserPosts = ({ userId }: IUserPostsProps) => {
   return (
     <div className="w-full max-w-6xl mx-auto mt-10 p-6 rounded-2xl shadow-lg bg-white border border-gray-200">
       <div className="space-y-3 mb-6 w-full">
-        <CKEditor
-          editor={ClassicEditor}
-          data={editingContent}
-          onChange={(event, editor) => setEditingContent(editor.getData())}
-        />
+        <TiptapEditor value={editingContent} onChange={setEditingContent} />
+
         <button
           onClick={createPost}
           className="flex items-center justify-center gap-2 bg-[#D1B046] hover:bg-yellow-500 text-[#4a4a4a] font-semibold px-4 py-2 rounded-full shadow transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-yellow-400 w-fit mx-auto mt-3"
@@ -90,11 +86,7 @@ const UserPosts = ({ userId }: IUserPostsProps) => {
           >
             {editingPostId === post.id ? (
               <>
-                <CKEditor
-                  editor={ClassicEditor}
-                  data={editingContent}
-                  onChange={(event, editor) => setEditingContent(editor.getData())}
-                />
+                <TiptapEditor value={editingContent} onChange={setEditingContent} />
                 <button
                   onClick={saveEdit}
                   className="w-full mt-3 py-2 rounded-lg font-semibold shadow transition-transform transform hover:scale-105 bg-[#D1B046] text-[#4a4a4a]"
