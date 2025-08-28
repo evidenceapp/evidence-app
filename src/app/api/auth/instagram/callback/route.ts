@@ -2,19 +2,19 @@ export const runtime = "nodejs";
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@/generated/prisma";
 import axios from "axios";
-// import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get("code");
-  // const token = req.cookies.get("token")?.value;
+  const token = req.cookies.get("token")?.value;
 
-  // if (!token) {
-  //   return NextResponse.redirect(new URL("/dashboard/login", req.url));
-  // }
+  if (!token) {
+    return NextResponse.redirect(new URL("/dashboard/login", req.url));
+  }
 
-  // const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;
+  const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;
 
   if (!code) {
     return NextResponse.json({ error: "Código não encontrado." }, { status: 400 });
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const existingUser = await prisma.user.findUnique({
-      where: { id: "cmcxne8s20000izj44kbop4ce" },
+      where: { id: decoded.userId },
       select: { instagramAccessToken: true },
     });
 
@@ -65,7 +65,7 @@ export async function GET(req: NextRequest) {
     );
 
     await prisma.user.update({
-      where: { id: "cmcxne8s20000izj44kbop4ce" },
+      where: { id: decoded.userId },
       data: {
         instagramAccessToken: access_token,
         instagramUsername: userRes.data.username,
@@ -80,10 +80,13 @@ export async function GET(req: NextRequest) {
         process.env.NODE_ENV === "development" ? "http://localhost:3000/" : req.url
       )
     );
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
     return NextResponse.json(
-      { error: "Erro ao autenticar ou atualizar o Instagram." },
+      {
+        error: "Erro ao autenticar ou atualizar o Instagram.",
+        details: error?.response?.data || error?.message || String(error),
+      },
       { status: 500 }
     );
   }
