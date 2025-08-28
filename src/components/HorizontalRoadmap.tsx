@@ -1,14 +1,12 @@
 "use client";
 
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useLayoutEffect, useRef } from 'react';
-
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import { items } from '../mocks/index';
-import Card from './Card';
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useRef } from "react";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { items } from "../mocks/index";
+import Card from "./Card";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,7 +16,8 @@ const MetricsShowcase = () => {
   const lastItemRef = useRef<HTMLDivElement>(null);
   const arrowRefs = useRef<HTMLDivElement[]>([]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    // ✅ Garante que roda só no cliente
     if (typeof window === "undefined") return;
 
     const section = sectionRef.current;
@@ -27,6 +26,7 @@ const MetricsShowcase = () => {
 
     if (!section || !container || !lastItem) return;
 
+    // Distância total do scroll horizontal
     const scrollDistance =
       lastItem.offsetLeft + lastItem.offsetWidth + 160 - window.innerWidth;
 
@@ -45,6 +45,7 @@ const MetricsShowcase = () => {
       }),
     });
 
+    // Animação das setas
     arrowRefs.current.forEach((arrow) => {
       if (arrow) {
         gsap.to(arrow, {
@@ -57,9 +58,11 @@ const MetricsShowcase = () => {
       }
     });
 
+    // Cleanup: remove triggers e animações para evitar memory leak
     return () => {
       trigger.kill();
       ScrollTrigger.getAll().forEach((t) => t.kill());
+      gsap.globalTimeline.clear();
     };
   }, []);
 

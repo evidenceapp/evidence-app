@@ -1,8 +1,8 @@
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
-import { useEffect, useRef } from 'react';
-
-import { testimonials } from '../mocks/index';
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import { useEffect, useRef } from "react";
+import Image from "next/image";
+import { testimonials } from "../mocks/index";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -79,7 +79,7 @@ const Feedback = () => {
             ref={(el) => (cardsRef.current[index] = el!)}
             className="bg-white rounded-xl shadow-xl p-6 flex flex-col items-center text-center hover:scale-[1.02] transition-transform duration-500 cursor-pointer"
           >
-            <img
+            <Image
               src={t.image}
               alt={t.alt}
               className="w-24 h-24 rounded-full object-cover border-4 border-[#D1B046] mb-4 shadow-lg"

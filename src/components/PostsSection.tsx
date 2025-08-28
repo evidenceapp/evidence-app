@@ -1,15 +1,15 @@
 "use client";
 
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useEffect, useRef, useState } from 'react';
-import { toast } from 'react-toastify';
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 
-import Loading from '@/app/Loading';
-import { IPostSection as Post } from '@/interfaces';
-import { extractVideoId } from '@/utils';
-import { faClock, faShareAlt } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Loading from "@/app/Loading";
+import { IPostSection as Post } from "@/interfaces";
+import { extractVideoId } from "@/utils";
+import { faClock, faShareAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -24,7 +24,8 @@ const PostsSection = () => {
   const take = 4;
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-
+  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     loadPosts();
   }, []);
