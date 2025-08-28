@@ -33,7 +33,10 @@ export async function POST(req: Request) {
       { expiresIn: "7d" }
     );
 
-    const response = NextResponse.next();
+    const response = NextResponse.redirect(new URL("/dashboard/admin/users", req.url), {
+      status: 303,
+    });
+
     response.cookies.set("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -42,10 +45,7 @@ export async function POST(req: Request) {
       maxAge: 60 * 60 * 24 * 7,
     });
 
-    return NextResponse.redirect(new URL("/dashboard/admin/users", req.url), {
-      status: 303,
-      headers: response.headers,
-    });
+    return response;
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Erro interno no servidor." }, { status: 500 });
