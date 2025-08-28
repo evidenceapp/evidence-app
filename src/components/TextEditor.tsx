@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { IPost, IUserPostsProps } from "@/interfaces";
 import { extractVideoId } from "@/utils";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { faCheck, faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -16,21 +15,28 @@ const UserPosts = ({ userId }: IUserPostsProps) => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await fetch(`/api/admin/posts?userId=${userId}`, {
-        cache: "no-store",
-      });
-      const data = await res.json();
-      setPosts(data.posts);
+      try {
+        const res = await fetch(`/api/admin/posts?userId=${userId}`, {
+          cache: "no-store",
+        });
+        const data = await res.json();
+        setPosts(data.posts);
+      } catch (error) {
+        console.error("Erro ao buscar posts:", error);
+      }
     };
     fetchPosts();
   }, [userId]);
 
   const createPost = async () => {
-    if (!editingContent || editingContent.trim() === "") return;
+    if (!editingContent.trim()) return;
+
     await fetch("/api/admin/posts", {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ content: editingContent, userId }),
     });
+
     setEditingContent("");
     location.reload();
   };
@@ -46,11 +52,14 @@ const UserPosts = ({ userId }: IUserPostsProps) => {
   };
 
   const saveEdit = async () => {
-    if (!editingPostId || editingContent.trim() === "") return;
+    if (!editingPostId || !editingContent.trim()) return;
+
     await fetch("/api/admin/posts", {
       method: "PUT",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: editingPostId, content: editingContent }),
     });
+
     setEditingPostId(null);
     setEditingContent("");
     location.reload();
