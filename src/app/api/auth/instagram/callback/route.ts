@@ -8,18 +8,13 @@ const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get("code");
-  console.log("req.cookies.get(token):::: ", req.cookies.get("token"));
   const token = req.cookies.get("token")?.value;
-
-  console.log("token:::: ", token);
 
   if (!token) {
     return NextResponse.redirect(new URL("/dashboard/login", req.url));
   }
 
   const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;
-
-  console.log("decoded:::: ", decoded);
 
   if (!code) {
     return NextResponse.json({ error: "Código não encontrado." }, { status: 400 });
