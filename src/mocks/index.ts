@@ -42,12 +42,6 @@ export const teamMembers = [
     image: "/images/EVIDENCE-MATHEUS.jpg",
   },
   {
-    name: "Miguel",
-    description: "Fisioterapeuta",
-    instagram: "@camelodromoonline",
-    image: "/images/EVIDENCE-MIGUEL.jpg",
-  },
-  {
     name: "Renato de Freitas",
     description: "Fisioterapeuta",
     instagram: "@renatodefreitasfisio",

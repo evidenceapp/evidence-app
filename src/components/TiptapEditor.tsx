@@ -33,8 +33,8 @@ const TiptapEditor = ({ value, onChange }: Props) => {
       Color,
       Link.configure({
         openOnClick: true,
-        autolink: true, // links automáticos ao digitar
-        linkOnPaste: true, // links automáticos ao colar
+        autolink: true,
+        linkOnPaste: true,
         HTMLAttributes: {
           class: "underline text-blue-600 hover:text-blue-800 cursor-pointer",
           target: "_blank",
@@ -67,9 +67,7 @@ const TiptapEditor = ({ value, onChange }: Props) => {
 
   return (
     <div className="rounded-xl shadow-sm overflow-hidden border border-gray-200 bg-white">
-      {/* Toolbar */}
       <div className="flex flex-wrap gap-2 items-center px-2 py-1 border-b bg-gray-50 text-gray-600">
-        {/* Bold */}
         <button
           onClick={() => editor.chain().focus().toggleBold().run()}
           className={`p-1.5 rounded hover:bg-gray-200 ${
@@ -79,7 +77,6 @@ const TiptapEditor = ({ value, onChange }: Props) => {
           <Bold size={16} />
         </button>
 
-        {/* Italic */}
         <button
           onClick={() => editor.chain().focus().toggleItalic().run()}
           className={`p-1.5 rounded hover:bg-gray-200 ${
@@ -89,7 +86,6 @@ const TiptapEditor = ({ value, onChange }: Props) => {
           <Italic size={16} />
         </button>
 
-        {/* Bullet List */}
         <button
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           className={`p-1.5 rounded hover:bg-gray-200 ${
@@ -99,7 +95,6 @@ const TiptapEditor = ({ value, onChange }: Props) => {
           <List size={16} />
         </button>
 
-        {/* Ordered List */}
         <button
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           className={`p-1.5 rounded hover:bg-gray-200 ${
@@ -109,7 +104,6 @@ const TiptapEditor = ({ value, onChange }: Props) => {
           <ListOrdered size={16} />
         </button>
 
-        {/* Heading 1 */}
         <button
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
           className={`p-1.5 rounded hover:bg-gray-200 ${
@@ -119,7 +113,6 @@ const TiptapEditor = ({ value, onChange }: Props) => {
           <Heading1 size={16} />
         </button>
 
-        {/* Heading 2 */}
         <button
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           className={`p-1.5 rounded hover:bg-gray-200 ${
@@ -129,7 +122,6 @@ const TiptapEditor = ({ value, onChange }: Props) => {
           <Heading2 size={16} />
         </button>
 
-        {/* Link */}
         <button
           onClick={() => editor.chain().focus().toggleLink({ href: "https://" }).run()}
           className={`p-1.5 rounded hover:bg-gray-200 ${
@@ -139,12 +131,10 @@ const TiptapEditor = ({ value, onChange }: Props) => {
           <LinkIcon size={16} />
         </button>
 
-        {/* Unlink */}
         <button onClick={unsetLink} className="p-1.5 rounded hover:bg-gray-200">
           <Unlink size={16} />
         </button>
 
-        {/* Color Picker */}
         <label className="relative cursor-pointer">
           <span
             className="w-6 h-6 rounded-full border border-gray-300 inline-block"
@@ -159,7 +149,6 @@ const TiptapEditor = ({ value, onChange }: Props) => {
         </label>
       </div>
 
-      {/* Área de edição */}
       <EditorContent editor={editor} />
     </div>
   );
