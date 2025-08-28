@@ -1,3 +1,4 @@
+export const runtime = "nodejs";
 import { PrismaClient } from "@/generated/prisma";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
