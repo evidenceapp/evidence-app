@@ -166,7 +166,6 @@ const PostsSection = () => {
                 key={username}
                 src={authorPost.author.instagramProfilePictureUrl}
                 alt={username}
-                fill
                 className={`w-12 h-12 rounded-full object-cover border cursor-pointer transition-opacity duration-300 ${
                   activeAuthors.has(username) ? "opacity-100" : "opacity-30"
                 }`}
