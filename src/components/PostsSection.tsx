@@ -29,7 +29,6 @@ const PostsSection = () => {
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Animação de posts
   useEffect(() => {
     if (!sectionRef.current) return;
     const ctx = gsap.context(() => {
@@ -56,7 +55,6 @@ const PostsSection = () => {
     return () => ctx.revert();
   }, [posts]);
 
-  // Função para carregar posts
   const loadPosts = useCallback(async () => {
     if (isLoading || !hasMore) return;
     setIsLoading(true);
@@ -89,7 +87,6 @@ const PostsSection = () => {
     }
   }, [isLoading, skip, take, hasMore]);
 
-  // Scroll infinito
   useEffect(() => {
     const grid = gridRef.current;
     if (!grid) return;
@@ -105,14 +102,11 @@ const PostsSection = () => {
     return () => grid.removeEventListener("scroll", handleScroll);
   }, [hasMore, isLoading, loadPosts]);
 
-  // Carregar posts iniciais apenas uma vez
   useEffect(() => {
     if (posts.length === 0 && !isLoading) {
       loadPosts();
     }
   }, [loadPosts, posts.length, isLoading]);
-
-  // Alternar autor
   const toggleAuthor = (username: string) => {
     setActiveAuthors((prev) => {
       const newSet = new Set(prev);
@@ -127,7 +121,6 @@ const PostsSection = () => {
 
   const filteredPosts = posts.filter((post) => activeAuthors.has(post.author.instagramUsername));
 
-  // Carregar post específico via query param
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const postId = params.get("post");

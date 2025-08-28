@@ -17,7 +17,6 @@ const MetricsShowcase = () => {
   const arrowRefs = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
-    // ✅ Garante que roda só no cliente
     if (typeof window === "undefined") return;
 
     const section = sectionRef.current;
@@ -26,7 +25,6 @@ const MetricsShowcase = () => {
 
     if (!section || !container || !lastItem) return;
 
-    // Distância total do scroll horizontal
     const scrollDistance = lastItem.offsetLeft + lastItem.offsetWidth + 160 - window.innerWidth;
 
     const trigger = ScrollTrigger.create({
@@ -43,7 +41,6 @@ const MetricsShowcase = () => {
       }),
     });
 
-    // Animação das setas
     arrowRefs.current.forEach((arrow) => {
       if (arrow) {
         gsap.to(arrow, {
@@ -56,7 +53,6 @@ const MetricsShowcase = () => {
       }
     });
 
-    // Cleanup: remove triggers e animações para evitar memory leak
     return () => {
       trigger.kill();
       ScrollTrigger.getAll().forEach((t) => t.kill());

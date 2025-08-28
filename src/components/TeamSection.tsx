@@ -1,6 +1,6 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { teamMembers } from "../mocks/index";
 import TeamCard from "./TeamCard";
@@ -10,9 +10,10 @@ gsap.registerPlugin(ScrollTrigger);
 const TeamSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const columnsContainerRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   const columns = useMemo(() => {
-    const fixedNames = ["Hugo Rodrigues", "Caio Mendes", "Hugo Eduardo"];
+    const fixedNames = ["Caio Mendes", "Hugo Eduardo", "Hugo Rodrigues"];
 
     const fixed = fixedNames
       .map((name) => teamMembers.find((m) => m.name === name))
@@ -30,15 +31,20 @@ const TeamSection = () => {
       else col3.push(member);
     });
 
-    return [col1, col2, col3];
+    return { fixed, remaining, grid: [col1, col2, col3] };
+  }, []);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
     const section = sectionRef.current;
     const columnsContainer = columnsContainerRef.current;
     if (!section || !columnsContainer) return;
-
-    const isMobile = window.innerWidth < 768;
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -78,14 +84,14 @@ const TeamSection = () => {
 
       gsap.fromTo(
         cards,
-        isMobile ? { autoAlpha: 0, y: 40, scale: 0.95 } : { autoAlpha: 0, y: 30, scale: 0.95 },
+        { autoAlpha: 0, y: 40, scale: 0.95 },
         {
           autoAlpha: 1,
           y: 0,
           scale: 1,
           duration: 0.6,
           ease: "power3.out",
-          stagger: isMobile ? 0.25 : 0.1,
+          stagger: 0.25,
           delay: 0.3,
           scrollTrigger: {
             trigger: section,
@@ -97,7 +103,7 @@ const TeamSection = () => {
     }, section);
 
     return () => ctx.revert();
-  }, []);
+  }, [isMobile]);
 
   return (
     <section
@@ -113,22 +119,39 @@ const TeamSection = () => {
         Conheça as pessoas por trás do nosso trabalho.
       </p>
 
-      <div
-        ref={columnsContainerRef}
-        className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 max-w-6xl mx-auto items-start"
-      >
-        {columns.map((col, i) => (
-          <div key={i} className={`flex flex-col gap-6 items-center ${i === 1 ? "md:mt-12" : ""}`}>
-            {col.map(
-              (member, index) =>
-                member && (
-                  <div key={`col-${i}-${index}`} className="team-card w-full flex justify-center">
-                    <TeamCard {...member} />
-                  </div>
-                )
+      <div ref={columnsContainerRef} className="px-4 max-w-6xl mx-auto">
+        {isMobile ? (
+          <div className="flex flex-col gap-6 items-center">
+            {[...columns.fixed, ...columns.remaining].map((member, index) =>
+              member ? (
+                <div key={`mobile-${index}`} className="team-card w-full flex justify-center">
+                  <TeamCard {...member} />
+                </div>
+              ) : null
             )}
           </div>
-        ))}
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+            {columns.grid.map((col, i) => (
+              <div
+                key={i}
+                className={`flex flex-col gap-6 items-center ${i === 1 ? "md:mt-12" : ""}`}
+              >
+                {col.map(
+                  (member, index) =>
+                    member && (
+                      <div
+                        key={`col-${i}-${index}`}
+                        className="team-card w-full flex justify-center"
+                      >
+                        <TeamCard {...member} />
+                      </div>
+                    )
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

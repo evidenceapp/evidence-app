@@ -72,10 +72,15 @@ const Footer = () => {
         {/* Direita */}
         <div className="footer-animate flex flex-col gap-3">
           <h4 className="text-lg font-semibold text-[#D1B046]">Contato e Localização</h4>
-          <div className="flex items-center gap-2 text-[#f9f9f9]">
+          <a
+            href="https://www.google.com/maps/dir/?api=1&destination=Av.+Araguari,+1900+-+1%C2%B0+andar+-+Osvaldo+Rezende,+Uberl%C3%A2ndia+-+MG,+38400-464"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-[#f9f9f9] hover:text-[#D1B046] transition-colors duration-300"
+          >
             <FontAwesomeIcon icon={faMapMarkerAlt} />
-            <span>Rua Exemplo, 123 - Uberlândia</span>
-          </div>
+            <span>Av. Araguari, 1900 - 1° andar - Osvaldo Rezende, Uberlândia - MG, 38400-464</span>
+          </a>
           <a
             href="https://wa.me/553496820404"
             target="_blank"

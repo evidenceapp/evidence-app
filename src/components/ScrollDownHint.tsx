@@ -17,7 +17,6 @@ const ScrollDownHint = () => {
 
         let shouldShow = false;
 
-        // Esconder caso o usuário esteja no final da página
         const isAtBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 20;
 
         if (!isAtBottom) {
