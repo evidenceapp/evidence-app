@@ -119,9 +119,17 @@ const Footer = () => {
         </div>
       </div>
 
-      <p className="mt-10 text-center text-sm text-[#f9f9f9] footer-animate">
-        © {new Date().getFullYear()} Evidence Instituto Clínico. Todos os direitos reservados.
-      </p>
+      <div className="mt-10 text-center footer-animate">
+        <p className="text-sm text-[#f9f9f9]">
+          © {new Date().getFullYear()} Evidence Instituto Clínico. Todos os direitos reservados. |
+          <a
+            href="/privacy-policy"
+            className="ml-1 text-[#D1B046] hover:underline transition-colors duration-300"
+          >
+            Política de Privacidade
+          </a>
+        </p>
+      </div>
     </footer>
   );
 };
