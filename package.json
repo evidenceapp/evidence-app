@@ -6,19 +6,45 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^41.4.2",
+    "@ckeditor/ckeditor5-react": "^11.0.0",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-brands-svg-icons": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@mantine/core": "^5.10.5",
+    "@mantine/hooks": "^5.10.5",
+    "@prisma/client": "^6.11.1",
+    "@tiptap/extension-underline": "^2.25.0",
+    "@tiptap/react": "^2.25.0",
+    "@tiptap/starter-kit": "^2.25.0",
+    "axios": "^1.10.0",
+    "bcryptjs": "^3.0.2",
+    "gsap": "^3.13.0",
+    "jsonwebtoken": "^9.0.2",
+    "next": "15.3.5",
+    "prisma": "^6.11.1",
     "react": "^19.0.0",
+    "react-datepicker": "^8.4.0",
     "react-dom": "^19.0.0",
-    "next": "15.3.5"
+    "react-hook-form": "^7.59.0",
+    "react-infinite-scroll-component": "^6.1.0",
+    "react-toastify": "^11.0.5",
+    "swiper": "^11.2.10"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4"
+    "eslint-config-next": "15.3.5",
+    "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5"
   }
 }
