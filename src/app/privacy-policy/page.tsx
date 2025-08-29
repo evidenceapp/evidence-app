@@ -77,6 +77,15 @@ export default function PrivacyPolicyPage() {
         uma nova versão nesta página.
       </p>
 
+      <h2 className="text-xl font-semibold mt-6 mb-2">9. Contato</h2>
+      <p className="mb-4 text-gray-700">
+        Em caso de dúvidas ou solicitações relacionadas a esta Política de Privacidade, você pode
+        entrar em contato conosco através do e-mail:{" "}
+        <a href="mailto:evidenceinstitutoapp@gmail.com" className="text-[#D1B046] underline">
+          evidenceinstitutoapp@gmail.com
+        </a>
+      </p>
+
       <p className="mt-6 text-sm text-gray-500">
         Última atualização: {new Date().toLocaleDateString("pt-BR")}
       </p>

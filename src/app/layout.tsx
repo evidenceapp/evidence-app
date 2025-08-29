@@ -12,6 +12,8 @@ export const metadata: Metadata = {
   description:
     "Evidence Instituto Clínico em Uberlândia – Saúde, Reabilitação & Performance com equipe multidisciplinar: médicos, fisioterapeutas, nutricionistas, pilates clínico, biomédica esteta e profissionais da educação física. Localizado na Av. Araguari, 1900 – Osvaldo Rezende.",
 
+  viewport: "width=device-width, initial-scale=1",
+
   keywords: [
     "evidence instituto clínico",
     "fisioterapia uberlândia",
@@ -75,6 +77,31 @@ export default function RootLayout({
           pauseOnHover
           theme="light"
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "MedicalClinic",
+              name: "Evidence Instituto Clínico",
+              url: "https://evidenceinstitutoclinico.com.br",
+              image: "https://evidenceinstitutoclinico.com.br/opengraph-image.jpg",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "Av. Araguari, 1900",
+                addressLocality: "Uberlândia",
+                addressRegion: "MG",
+                postalCode: "38400-060",
+                addressCountry: "BR",
+              },
+              contactPoint: {
+                "@type": "ContactPoint",
+                telephone: "+55-34-9682-0404",
+                contactType: "customer service",
+              },
+            }),
+          }}
+        ></script>
       </body>
     </html>
   );
