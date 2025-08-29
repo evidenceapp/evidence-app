@@ -67,16 +67,23 @@ export async function GET(req: NextRequest) {
           { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
         );
 
-        const exchangeRes = await axios.get("https://graph.instagram.com/access_token", {
-          params: {
-            grant_type: "ig_exchange_token",
-            client_secret: process.env.INSTAGRAM_CLIENT_SECRET!,
-            access_token: tokenRes.data.access_token,
-          },
-        });
+        console.log("[IG] short-lived token recebido:", tokenRes.data.access_token);
 
-        access_token = exchangeRes.data.access_token;
-        console.log("[IG] exchange (short->long) OK");
+        try {
+          const exchangeRes = await axios.get("https://graph.instagram.com/access_token", {
+            params: {
+              grant_type: "ig_exchange_token",
+              client_secret: process.env.INSTAGRAM_CLIENT_SECRET!,
+              access_token: tokenRes.data.access_token,
+            },
+          });
+
+          access_token = exchangeRes.data.access_token;
+          console.log("[IG] exchange (short->long) OK");
+        } catch (e) {
+          console.warn("[IG] exchange falhou, usando token curto como fallback:", axiosErr(e));
+          access_token = tokenRes.data.access_token; // fallback
+        }
       } catch (e) {
         console.error("[IG] exchange falhou:", axiosErr(e));
         return NextResponse.json(
