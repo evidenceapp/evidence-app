@@ -55,15 +55,54 @@ export const teamMembers = [
   },
 ];
 
-export const testimonials = Array.from({ length: 8 }, (_, i) => ({
-  id: i,
-  image: "/images/ft-1.jpg",
-  alt: "Feeback Teste",
-  feedback: "Gostei muito",
-  name: "Caio",
-  stars: 5,
-  googleReviewUrl: "https://g.co/kgs/rUQaz1G",
-}));
+export const testimonials = [
+  {
+    id: 0,
+    image: "/reviews/raisse.png",
+    alt: "Feedback Raisse",
+    feedback: "Excelentes profissionais!",
+    name: "Raisse Andrade",
+    stars: 5,
+    googleReviewUrl: "https://maps.app.goo.gl/mb6UpkH9FaRA6tpe9",
+  },
+  {
+    id: 1,
+    image: "/reviews/henrique.png",
+    alt: "Feedback Henrique",
+    feedback: "Equipe sensacional, estrutura completa, recomendo de olhos fechados",
+    name: "Henrique Lopes Dantas e Sousa",
+    stars: 5,
+    googleReviewUrl: "https://maps.app.goo.gl/AZU1M4B92wtXXzFb6",
+  },
+  {
+    id: 2,
+    image: "/reviews/daiany.png",
+    alt: "Feedback Daiany",
+    feedback: "Profissionais qualificados, bom atendimento.",
+    name: "Daiany Machado Naves",
+    stars: 5,
+    googleReviewUrl: "https://maps.app.goo.gl/hMVULj6Zn4Ecjb2f6",
+  },
+  // {
+  //   id: 3,
+  //   image: "/reviews/anario.png",
+  //   alt: "Feedback Anário",
+  //   feedback: "Ótimo local, ótimos profissionais!!! Super recomendado.",
+  //   name: "Anário Queiroz",
+  //   stars: 5,
+  //   googleReviewUrl: "https://maps.app.goo.gl/NMfH3aDbGjgXoGpB8",
+  // },
+  {
+    id: 4,
+    image: "/reviews/gui.png",
+    alt: "Feedback João",
+    feedback:
+      "Clínica excelente. Profissionais muito bem capacitados e cuidadosos com seus pacientes.",
+    name: "Guilherme Brianti",
+    stars: 5,
+    googleReviewUrl: "https://maps.app.goo.gl/rSZneMExTtdCndSDA",
+  },
+];
 
 export const galeryImages = Array.from({ length: 10 }, () => "/images/ft-1.jpg");
 
