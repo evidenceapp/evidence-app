@@ -10,9 +10,6 @@ export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get("code");
   const token = req.cookies.get("token")?.value;
 
-  console.log("code:: ", code);
-  console.log("token:: ", token);
-
   if (!token) {
     return NextResponse.redirect(new URL("/dashboard/login", req.url));
   }
@@ -28,9 +25,6 @@ export async function GET(req: NextRequest) {
       where: { id: decoded.userId },
       select: { instagramAccessToken: true },
     });
-
-    console.log("existingUser::: ", existingUser);
-    console.log("instagramAccessToken::: ", existingUser?.instagramAccessToken);
 
     let access_token: string;
 
@@ -56,7 +50,7 @@ export async function GET(req: NextRequest) {
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
         }
       );
-      console.log("tokenRes::::", tokenRes);
+
       const exchangeRes = await axios.get("https://graph.instagram.com/access_token", {
         params: {
           grant_type: "ig_exchange_token",
@@ -64,7 +58,6 @@ export async function GET(req: NextRequest) {
           access_token: tokenRes.data.access_token,
         },
       });
-      console.log("exchangeRes::::", exchangeRes);
 
       access_token = exchangeRes.data.access_token;
     }
@@ -72,7 +65,6 @@ export async function GET(req: NextRequest) {
       `https://graph.instagram.com/me?fields=id,username,account_type,profile_picture_url&access_token=${access_token}`
     );
 
-    console.log("userRes::: ", userRes)
     await prisma.user.update({
       where: { id: decoded.userId },
       data: {
