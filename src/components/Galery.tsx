@@ -3,13 +3,14 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef, useState } from "react";
 
-import { galeryImages } from "../mocks/index";
+import { galeryMedia } from "../mocks/index";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Galery = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedMedia, setSelectedMedia] = useState<string | null>(null);
+  const [isVideo, setIsVideo] = useState(false);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -48,14 +49,14 @@ const Galery = () => {
       }
     );
 
-    const images = section.querySelectorAll(".gallery-image");
+    const mediaElements = section.querySelectorAll(".gallery-media");
 
-    images.forEach((img, i) => {
+    mediaElements.forEach((media, i) => {
       const fromX = i % 2 === 0 ? -50 : 50;
       const fromY = i % 3 === 0 ? -50 : 50;
 
       gsap.fromTo(
-        img,
+        media,
         { autoAlpha: 0, x: fromX, y: fromY, scale: 0.95 },
         {
           autoAlpha: 1,
@@ -66,7 +67,7 @@ const Galery = () => {
           ease: "power2.out",
           delay: i * 0.05,
           scrollTrigger: {
-            trigger: img,
+            trigger: media,
             start: "top 90%",
             toggleActions: "play none none reset",
           },
@@ -76,7 +77,8 @@ const Galery = () => {
 
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setSelectedImage(null);
+        setSelectedMedia(null);
+        setIsVideo(false);
       }
     };
 
@@ -109,37 +111,68 @@ const Galery = () => {
           </p>
 
           <div className="gallery-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[200px]">
-            {galeryImages.map((src, index) => (
+            {galeryMedia.map(({ src, type }, index) => (
               <div
                 key={index}
-                className={`relative overflow-hidden rounded-xl shadow-md group cursor-pointer ${
-                  index % 5 === 0 ? "row-span-2" : ""
-                } gallery-image`}
-                onClick={() => setSelectedImage(src)}
+                className={`relative overflow-hidden rounded-xl shadow-md group cursor-pointer gallery-media ${
+                  index % 5 === 0 ? "row-span-2" : "row-span-1"
+                }`}
+                style={{ width: "100%", height: "100%" }}
+                onClick={() => {
+                  setSelectedMedia(src);
+                  setIsVideo(type === "video");
+                }}
               >
-                <Image
-                  src={src}
-                  alt={`Galeria ${index + 1}`}
-                  fill
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
+                {type === "image" ? (
+                  <Image
+                    src={src}
+                    alt={`Galeria ${index + 1}`}
+                    fill
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    style={{ objectFit: "cover" }}
+                  />
+                ) : (
+                  <video
+                    src={src}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loop
+                    playsInline
+                    onMouseEnter={(e) => e.currentTarget.play()}
+                    onMouseLeave={(e) => e.currentTarget.pause()}
+                    style={{ objectFit: "cover" }}
+                  />
+                )}
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {selectedImage && (
+      {selectedMedia && (
         <div
           className="fixed inset-0 flex items-center justify-center z-50 p-4 backdrop-blur-sm bg-black/40"
-          onClick={() => setSelectedImage(null)}
+          onClick={() => {
+            setSelectedMedia(null);
+            setIsVideo(false);
+          }}
         >
-          <Image
-            src={selectedImage}
-            alt="Visualização ampliada"
-            className="max-w-[80%] max-h-[80%] rounded-lg shadow-xl transition-transform duration-300"
-            onClick={(e) => e.stopPropagation()}
-          />
+          {isVideo ? (
+            <video
+              src={selectedMedia}
+              className="max-w-[80%] max-h-[80%] rounded-lg shadow-xl"
+              controls
+              autoPlay
+            />
+          ) : (
+            <Image
+              src={selectedMedia}
+              alt="Visualização ampliada"
+              width={400}
+              height={600}
+              className="max-w-[80%] max-h-[80%] rounded-lg shadow-xl transition-transform duration-300"
+              onClick={(e) => e.stopPropagation()}
+            />
+          )}
         </div>
       )}
     </>

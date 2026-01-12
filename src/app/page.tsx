@@ -24,7 +24,7 @@ export default function HomePage() {
         buttonText="Agende agora"
       />
       <HorizontalRoadmap />
-      <PostsSection />
+      {/* <PostsSection /> */}
       <Galery />
       <TeamSection />
       <Feedback />

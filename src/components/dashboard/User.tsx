@@ -38,7 +38,9 @@ const UserDash = (user: IUser | null) => {
             <Image
               src={user.instagramProfilePictureUrl}
               alt="Instagram Avatar"
-              className="rounded-full w-24 h-24 object-cover border-4 border-[#D1B046] mb-2"
+              width={96}
+              height={96}
+              className="rounded-full object-cover border-4 border-[#D1B046] mb-2"
             />
           )}
           <p className="text-lg font-semibold flex items-center gap-2">

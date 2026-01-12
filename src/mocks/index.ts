@@ -1,3 +1,5 @@
+import { Users, SmileyWink, Lightning, UsersFour, Cpu, Headset } from "phosphor-react";
+
 export const teamMembers = [
   {
     name: "Caio Mendes",
@@ -42,12 +44,6 @@ export const teamMembers = [
     image: "/images/EVIDENCE-MATHEUS.jpg",
   },
   {
-    name: "Renato de Freitas",
-    description: "Fisioterapeuta",
-    instagram: "@renatodefreitasfisio",
-    image: "/images/EVIDENCE-RENATO.jpg",
-  },
-  {
     name: "Ana Luísa",
     description: "Fisioterapeuta",
     instagram: "@analuisapains",
@@ -83,15 +79,7 @@ export const testimonials = [
     stars: 5,
     googleReviewUrl: "https://maps.app.goo.gl/hMVULj6Zn4Ecjb2f6",
   },
-  // {
-  //   id: 3,
-  //   image: "/reviews/anario.png",
-  //   alt: "Feedback Anário",
-  //   feedback: "Ótimo local, ótimos profissionais!!! Super recomendado.",
-  //   name: "Anário Queiroz",
-  //   stars: 5,
-  //   googleReviewUrl: "https://maps.app.goo.gl/NMfH3aDbGjgXoGpB8",
-  // },
+
   {
     id: 4,
     image: "/reviews/gui.png",
@@ -104,43 +92,52 @@ export const testimonials = [
   },
 ];
 
-export const galeryImages = Array.from({ length: 10 }, () => "/images/ft-1.jpg");
+export const galeryMedia = [
+  { src: "/videos/1.mp4", type: "video" },
+  { src: "/images/ft-1.jpg", type: "image" },
+  { src: "/galery/1.jpg", type: "image" },
+  { src: "/videos/2.mp4", type: "video" },
+  { src: "/videos/4.mp4", type: "video" },
+  { src: "/videos/3.mp4", type: "video" },
+  { src: "/galery/3.jpg", type: "image" },
+  { src: "/galery/2.jpg", type: "image" },
+];
 
 export const items = [
   {
     title: "5K+ Pacientes Atendidos",
     description:
       "Mais de 5.000 pacientes já passaram por nossos programas de fisioterapia, com resultados comprovados e tratamentos personalizados.",
-    image: "/images/ft-1.jpg",
+    icon: Users,
   },
   {
     title: "99% de Satisfação",
     description:
       "Nossa abordagem baseada em evidências garante a satisfação e melhora contínua dos pacientes, com acompanhamento próximo e humanizado.",
-    image: "/images/ft-1.jpg",
+    icon: SmileyWink,
   },
   {
     title: "Recuperação 3x Mais Rápida",
     description:
       "Utilizamos técnicas modernas e equipamentos de última geração para acelerar o processo de reabilitação e maximizar os resultados.",
-    image: "/images/ft-1.jpg",
+    icon: Lightning,
   },
   {
     title: "Atendimento Especializado",
     description:
       "Profissionais experientes em diversas áreas da fisioterapia, oferecendo soluções personalizadas para cada necessidade clínica.",
-    image: "/images/ft-1.jpg",
+    icon: UsersFour,
   },
   {
     title: "Tecnologia Avançada",
     description:
       "Equipamentos de ponta e métodos inovadores garantem maior precisão no diagnóstico e na aplicação das terapias.",
-    image: "/images/ft-1.jpg",
+    icon: Cpu,
   },
   {
     title: "Suporte Contínuo",
     description:
       "Nossa equipe acompanha cada paciente de forma próxima, oferecendo suporte completo durante todo o tratamento e pós-tratamento.",
-    image: "/images/ft-1.jpg",
+    icon: Headset,
   },
 ];

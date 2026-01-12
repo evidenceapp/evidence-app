@@ -166,6 +166,8 @@ const PostsSection = () => {
                 key={username}
                 src={authorPost.author.instagramProfilePictureUrl}
                 alt={username}
+                width={48}
+                height={48}
                 className={`w-12 h-12 rounded-full object-cover border cursor-pointer transition-opacity duration-300 ${
                   activeAuthors.has(username) ? "opacity-100" : "opacity-30"
                 }`}
@@ -194,6 +196,8 @@ const PostsSection = () => {
                 <Image
                   src={post.author.instagramProfilePictureUrl}
                   alt={post.author.instagramUsername}
+                  width={40}
+                  height={40}
                   className="w-10 h-10 rounded-full object-cover border border-gray-300"
                 />
                 <div>
@@ -255,6 +259,8 @@ const PostsSection = () => {
               <Image
                 src={selectedPost.author.instagramProfilePictureUrl}
                 alt={selectedPost.author.instagramUsername}
+                width={48}
+                height={48}
                 className="w-12 h-12 rounded-full object-cover border"
               />
               <div>

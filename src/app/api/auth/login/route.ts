@@ -33,8 +33,13 @@ export async function POST(req: Request) {
       { expiresIn: "7d" }
     );
 
-    const response = NextResponse.redirect(new URL("/dashboard/admin/users", req.url), {
-      status: 303,
+    const response = NextResponse.json({
+      success: true,
+      user: {
+        id: user.id,
+        username: user.username,
+        role: user.role,
+      },
     });
 
     response.cookies.set("token", token, {

@@ -1,4 +1,5 @@
 import { RefObject } from "react";
+import { Icon } from "phosphor-react";
 
 export interface INavLink {
   name: string;
@@ -64,7 +65,8 @@ export interface ITeamCardProps {
 export interface ICard {
   title: string;
   description: string;
-  image: string;
+  image?: string;
+  icon?: Icon;
   isLast: boolean;
   lastItemRef: RefObject<HTMLDivElement | null>;
 }

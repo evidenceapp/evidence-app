@@ -1,9 +1,8 @@
 import Image from "next/image";
 import { useState } from "react";
-
 import { ICard } from "@/interfaces";
 
-const Card = ({ title, description, image, isLast, lastItemRef }: ICard) => {
+const Card = ({ title, description, image, icon: Icon, isLast, lastItemRef }: ICard) => {
   const [hover, setHover] = useState(false);
   return (
     <div
@@ -17,7 +16,11 @@ const Card = ({ title, description, image, isLast, lastItemRef }: ICard) => {
           hover ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"
         }`}
       >
-        <Image src={image} alt={title} width={80} height={80} className="object-contain mb-4" />
+        {image ? (
+          <Image src={image} alt={title} width={80} height={80} className="object-contain mb-4" />
+        ) : (
+          Icon && <Icon size={80} className="mb-4 text-neutral-700" />
+        )}
         <h2 className="text-lg md:text-2xl font-bold text-center text-neutral-700">{title}</h2>
       </div>
 

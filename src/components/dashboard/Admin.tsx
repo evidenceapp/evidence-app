@@ -95,6 +95,8 @@ const AdminDash = ({ usersList }: { usersList: IUser[] }) => {
                     <Image
                       src={user.instagramProfilePictureUrl}
                       alt={user.username}
+                      width={32}
+                      height={32}
                       className="w-8 h-8 rounded-full object-cover"
                     />
                   )}

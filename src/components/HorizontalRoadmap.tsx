@@ -5,8 +5,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef } from "react";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { items } from "../mocks/index";
+import { ICard } from "@/interfaces";
 import Card from "./Card";
+import { items } from "../mocks/index";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -78,12 +79,12 @@ const MetricsShowcase = () => {
         ref={containerRef}
         className="relative flex w-[250vw] md:w-[300vw] space-x-6 md:space-x-8 px-6 md:px-16 py-20 md:py-32 items-center"
       >
-        {items.map(({ title, description, image }, index) => (
+        {(items as ICard[]).map(({ title, description, icon }, index) => (
           <div key={index} className="flex items-center space-x-6">
             <Card
               title={title}
               description={description}
-              image={image}
+              icon={icon}
               isLast={index === items.length - 1}
               lastItemRef={lastItemRef}
             />

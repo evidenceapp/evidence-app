@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get("code");
   const token = req.cookies.get("token")?.value;
-
+ 
   if (!token) {
     return NextResponse.redirect(new URL("/dashboard/login", req.url));
   }
