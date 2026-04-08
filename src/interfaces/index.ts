@@ -19,8 +19,6 @@ export interface IUser {
   username: string;
   role: string;
   instagramUsername?: string;
-  instagramProfilePictureUrl?: string;
-  instagramAccountType?: string;
 }
 
 export interface IPost {
@@ -32,7 +30,6 @@ export interface IPost {
 export interface IPostSection extends IPost {
   author: {
     username: string;
-    instagramProfilePictureUrl: string;
     instagramUsername: string;
   };
 }

@@ -3,24 +3,8 @@ import { PrismaClient } from "@/generated/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-// import axios from "axios";
 
 const prisma = new PrismaClient();
-
-// async function fetchInstagramProfile(accessToken: string) {
-//   try {
-//     const res = await axios.get(
-//       `https://graph.instagram.com/me?fields=id,username,account_type,profile_picture_url&access_token=${accessToken}`
-//     );
-//     return res.data;
-//   } catch (error) {
-//     console.error(
-//       "Erro ao buscar dados do Instagram:",
-//       (error as any).response?.data || error
-//     );
-//     return null;
-//   }
-// }
 
 function getToken(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
@@ -45,50 +29,12 @@ export async function GET(req: NextRequest) {
       username: true,
       role: true,
       instagramUsername: true,
-      instagramProfilePictureUrl: true,
-      instagramAccountType: true,
-      instagramAccessToken: true,
     },
   });
 
   if (!currentUser) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
-
-  // if (currentUser.instagramAccessToken) {
-  //   const instaData = await fetchInstagramProfile(
-  //     currentUser.instagramAccessToken
-  //   );
-  //   console.log(instaData);
-  // }
-
-  //   if (instaData) {
-  //     // Verifica se precisa atualizar para evitar writes desnecessários
-  //     if (
-  //       instaData.username !== currentUser.instagramUsername ||
-  //       instaData.profile_picture_url !==
-  //         currentUser.instagramProfilePictureUrl ||
-  //       instaData.account_type !== currentUser.instagramAccountType
-  //     ) {
-  //       await prisma.user.update({
-  //         where: { id: decoded.userId },
-  //         data: {
-  //           instagramUsername: instaData.username,
-  //           instagramProfilePictureUrl: instaData.profile_picture_url,
-  //           instagramAccountType: instaData.account_type,
-  //         },
-  //       });
-
-  //       // Atualiza currentUser local para refletir alterações
-  //       currentUser = {
-  //         ...currentUser,
-  //         instagramUsername: instaData.username,
-  //         instagramProfilePictureUrl: instaData.profile_picture_url,
-  //         instagramAccountType: instaData.account_type,
-  //       };
-  //     }
-  //   }
-  // }
 
   if (decoded.role === "admin") {
     const users = await prisma.user.findMany({
@@ -100,7 +46,6 @@ export async function GET(req: NextRequest) {
       select: {
         id: true,
         username: true,
-        instagramProfilePictureUrl: true,
         instagramUsername: true,
       },
     });
@@ -128,7 +73,7 @@ export async function POST(req: NextRequest) {
     data: {
       username,
       password: hashedPassword,
-      role: "user", // Força sempre como user
+      role: "user",
     },
   });
 
@@ -161,6 +106,38 @@ export async function DELETE(req: NextRequest) {
 
   await prisma.user.delete({
     where: { id },
+  });
+
+  return NextResponse.json({ success: true });
+}
+
+export async function PUT(req: NextRequest) {
+  const decoded = getToken(req);
+  if (!decoded) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const body = await req.json();
+  const { id, username, password, instagramUsername } = body;
+
+  // Users can only update their own profile, admins can update anyone
+  if (decoded.role !== "admin" && decoded.userId !== id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const updateData: Record<string, string> = {};
+
+  if (username) updateData.username = username;
+  if (password) updateData.password = await bcrypt.hash(password, 10);
+  if (instagramUsername) updateData.instagramUsername = instagramUsername;
+
+  if (Object.keys(updateData).length === 0) {
+    return NextResponse.json({ error: "No data to update" }, { status: 400 });
+  }
+
+  await prisma.user.update({
+    where: { id: id || decoded.userId },
+    data: updateData,
   });
 
   return NextResponse.json({ success: true });

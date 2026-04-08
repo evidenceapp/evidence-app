@@ -6,16 +6,16 @@ import { ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
   title: {
-    default: "Evidence Instituto Clínico | Saúde, Reabilitação e Performance",
-    template: "%s | Evidence Instituto Clínico",
+    default: "Instituto FisioWellness Evidence | Saúde, Reabilitação e Performance",
+    template: "%s | Instituto FisioWellness Evidence",
   },
   description:
-    "Evidence Instituto Clínico em Uberlândia – Saúde, Reabilitação & Performance com equipe multidisciplinar: médicos, fisioterapeutas, nutricionistas, pilates clínico, biomédica esteta e profissionais da educação física. Localizado na Av. Araguari, 1900 – Osvaldo Rezende.",
+    "Instituto FisioWellness Evidence em Uberlândia – Saúde, Reabilitação & Performance com equipe multidisciplinar: médicos, fisioterapeutas, nutricionistas, pilates clínico, biomédica esteta e profissionais da educação física. Localizado na Av. Araguari, 1900 – Osvaldo Rezende.",
 
   viewport: "width=device-width, initial-scale=1",
 
   keywords: [
-    "evidence instituto clínico",
+    "instituto fisiowellness evidence",
     "fisioterapia uberlândia",
     "pilates clínico",
     "nutrição esportiva",
@@ -23,15 +23,15 @@ export const metadata: Metadata = {
     "reabilitação física",
     "saúde e performance",
   ],
-  authors: [{ name: "Evidence Instituto Clínico" }],
-  creator: "Evidence Instituto Clínico",
+  authors: [{ name: "Instituto FisioWellness Evidence" }],
+  creator: "Instituto FisioWellness Evidence",
 
   openGraph: {
-    title: "Evidence Instituto Clínico | Saúde, Reabilitação e Performance",
+    title: "Instituto FisioWellness Evidence | Saúde, Reabilitação e Performance",
     description:
       "Saúde, Reabilitação & Performance em Uberlândia. Equipe de médicos, fisioterapeutas, nutricionistas, pilates clínico, biomédica esteta e educadores físicos.",
     url: "https://evidenceinstitutoclinico.com.br",
-    siteName: "Evidence Instituto Clínico",
+    siteName: "Instituto FisioWellness Evidence",
     locale: "pt_BR",
     type: "website",
   },
@@ -83,7 +83,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "MedicalClinic",
-              name: "Evidence Instituto Clínico",
+              name: "Instituto FisioWellness Evidence",
               url: "https://evidenceinstitutoclinico.com.br",
               image: "https://evidenceinstitutoclinico.com.br/opengraph-image.jpg",
               address: {

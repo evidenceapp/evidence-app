@@ -8,8 +8,6 @@ import { toast } from "react-toastify";
 import Loading from "@/app/Loading";
 import { IPostSection as Post } from "@/interfaces";
 import { extractVideoId } from "@/utils";
-import { faClock, faShareAlt } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -32,10 +30,26 @@ const PostsSection = () => {
   useEffect(() => {
     if (!sectionRef.current) return;
     const ctx = gsap.context(() => {
+      // Header animation
+      gsap.fromTo(
+        ".posts-header",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+          },
+        }
+      );
+
       const elements = gsap.utils.toArray(".post-animate");
-      elements.forEach((el: any, idx) => {
+      elements.forEach((el: unknown, idx) => {
         gsap.fromTo(
-          el,
+          el as Element,
           { y: 40, opacity: 0 },
           {
             y: 0,
@@ -148,74 +162,179 @@ const PostsSection = () => {
       <section
         id="ciencia"
         ref={sectionRef}
-        className="py-16 px-6 bg-[#f9f9f9] text-[#2b2b2b] relative overflow-hidden"
+        className="relative py-24 md:py-32 px-6 overflow-hidden"
+        style={{
+          background: "linear-gradient(180deg, #1E2832 0%, #2D3A4A 50%, #1E2832 100%)",
+        }}
       >
-        <h2 className="text-3xl md:text-5xl font-bold text-center mb-4">
-          Novidades em Ciência e Saúde
-        </h2>
-        <p className="text-base md:text-lg text-center mb-8 max-w-xl mx-auto">
-          Acompanhe os conteúdos, descobertas e práticas que transformam a saúde e a ciência.
-        </p>
-
-        <div className="flex flex-wrap justify-center gap-3 mb-8">
-          {authors.map((username) => {
-            const authorPost = posts.find((p) => p.author.instagramUsername === username);
-            if (!authorPost) return null;
-            return (
-              <Image
-                key={username}
-                src={authorPost.author.instagramProfilePictureUrl}
-                alt={username}
-                width={48}
-                height={48}
-                className={`w-12 h-12 rounded-full object-cover border cursor-pointer transition-opacity duration-300 ${
-                  activeAuthors.has(username) ? "opacity-100" : "opacity-30"
-                }`}
-                onClick={() => toggleAuthor(username)}
-              />
-            );
-          })}
-        </div>
-
+        {/* Decorative elements */}
         <div
-          ref={gridRef}
-          className="max-w-5xl mx-auto grid gap-6 grid-cols-1 md:grid-cols-2 pr-2 relative max-h-[900px] overflow-y-auto"
-        >
-          {filteredPosts.map((post) => (
-            <div
-              key={post.id}
-              className="post-animate p-5 rounded-2xl bg-white border border-gray-200 shadow hover:scale-[1.02] transition-transform duration-300 w-full max-w-md max-h-[520px] overflow-hidden flex flex-col cursor-pointer mx-auto"
-              onClick={() => {
-                setSelectedPost(post);
-                const params = new URLSearchParams(window.location.search);
-                params.set("post", post.id);
-                window.history.pushState({}, "", `${window.location.pathname}?${params}`);
-              }}
+          className="absolute w-[500px] h-[500px] rounded-full opacity-15 blur-3xl pointer-events-none"
+          style={{
+            background: "radial-gradient(circle, rgba(209, 176, 70, 0.1) 0%, transparent 70%)",
+            top: "-150px",
+            right: "-150px",
+          }}
+        />
+        <div
+          className="absolute w-[400px] h-[400px] rounded-full opacity-10 blur-3xl pointer-events-none"
+          style={{
+            background: "radial-gradient(circle, rgba(209, 176, 70, 0.1) 0%, transparent 70%)",
+            bottom: "-100px",
+            left: "-100px",
+          }}
+        />
+
+        <div className="relative z-10">
+          {/* Header */}
+          <div className="posts-header text-center mb-12">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <div
+                className="w-12 h-[1px]"
+                style={{ background: "linear-gradient(90deg, transparent, #D1B046)" }}
+              />
+              <span
+                className="text-xs tracking-[0.3em] uppercase font-light"
+                style={{ color: "#D1B046" }}
+              >
+                Conteúdo
+              </span>
+              <div
+                className="w-12 h-[1px]"
+                style={{ background: "linear-gradient(90deg, #D1B046, transparent)" }}
+              />
+            </div>
+
+            <h2
+              className="text-4xl md:text-5xl font-extralight mb-4"
+              style={{ color: "#F5F5F5" }}
             >
-              <div className="flex items-center gap-3 mb-3">
-                <Image
-                  src={post.author.instagramProfilePictureUrl}
-                  alt={post.author.instagramUsername}
-                  width={40}
-                  height={40}
-                  className="w-10 h-10 rounded-full object-cover border border-gray-300"
-                />
-                <div>
-                  <span className="font-semibold">@{post.author.instagramUsername}</span>
-                  <div className="flex items-center gap-1 text-gray-500 text-xs">
-                    <FontAwesomeIcon icon={faClock} />
-                    <span>{new Date(post.createdAt).toLocaleString()}</span>
+              Novidades em{" "}
+              <span style={{ color: "#D1B046", fontWeight: 300 }}>Ciência e Saúde</span>
+            </h2>
+
+            <p
+              className="text-base md:text-lg font-light max-w-xl mx-auto"
+              style={{ color: "rgba(245, 245, 245, 0.6)" }}
+            >
+              Acompanhe os conteúdos, descobertas e práticas que transformam a saúde e a ciência.
+            </p>
+          </div>
+
+          {/* Author filters */}
+          <div className="flex flex-wrap justify-center gap-4 mb-12">
+            {authors.map((username) => {
+              const authorPost = posts.find((p) => p.author.instagramUsername === username);
+              if (!authorPost) return null;
+              return (
+                <div
+                  key={username}
+                  className="relative cursor-pointer"
+                  onClick={() => toggleAuthor(username)}
+                >
+                  <div
+                    className="relative w-14 h-14 rounded-full overflow-hidden transition-all duration-300"
+                    style={{
+                      border: activeAuthors.has(username)
+                        ? "2px solid #D1B046"
+                        : "2px solid rgba(209, 176, 70, 0.2)",
+                      opacity: activeAuthors.has(username) ? 1 : 0.4,
+                    }}
+                  >
+                    <Image
+                      src={`https://unavatar.io/instagram/${username}`}
+                      alt={username}
+                      fill
+                      className="object-cover"
+                      unoptimized
+                    />
                   </div>
                 </div>
-              </div>
+              );
+            })}
+          </div>
 
+          {/* Posts grid */}
+          <div
+            ref={gridRef}
+            className="max-w-5xl mx-auto grid gap-6 grid-cols-1 md:grid-cols-2 pr-2 relative max-h-[900px] overflow-y-auto"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(209, 176, 70, 0.3) transparent",
+            }}
+          >
+            {filteredPosts.map((post) => (
               <div
-                className="prose max-w-none text-sm overflow-y-auto pr-1 flex-1"
-                style={{ maxHeight: "280px" }}
-                dangerouslySetInnerHTML={{
-                  __html: post.content.replace(
-                    /<a[^>]+href=["']?(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})).*?<\/a>/g,
-                    (_, url, videoId) => `
+                key={post.id}
+                className="post-animate p-6 w-full max-w-md max-h-[520px] overflow-hidden flex flex-col cursor-pointer mx-auto transition-all duration-300"
+                style={{
+                  background: "linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)",
+                  border: "1px solid rgba(209, 176, 70, 0.15)",
+                  borderRadius: "2px",
+                }}
+                onClick={() => {
+                  setSelectedPost(post);
+                  const params = new URLSearchParams(window.location.search);
+                  params.set("post", post.id);
+                  window.history.pushState({}, "", `${window.location.pathname}?${params}`);
+                }}
+                onMouseEnter={(e) => {
+                  gsap.to(e.currentTarget, {
+                    borderColor: "rgba(209, 176, 70, 0.4)",
+                    scale: 1.02,
+                    duration: 0.3,
+                  });
+                }}
+                onMouseLeave={(e) => {
+                  gsap.to(e.currentTarget, {
+                    borderColor: "rgba(209, 176, 70, 0.15)",
+                    scale: 1,
+                    duration: 0.3,
+                  });
+                }}
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div
+                    className="relative w-10 h-10 rounded-full overflow-hidden"
+                    style={{ border: "2px solid rgba(209, 176, 70, 0.4)" }}
+                  >
+                    <Image
+                      src={`https://unavatar.io/instagram/${post.author.instagramUsername}`}
+                      alt={post.author.instagramUsername}
+                      fill
+                      className="object-cover"
+                      unoptimized
+                    />
+                  </div>
+                  <div>
+                    <span
+                      className="text-sm font-medium"
+                      style={{ color: "#F5F5F5" }}
+                    >
+                      @{post.author.instagramUsername}
+                    </span>
+                    <div
+                      className="flex items-center gap-1 text-xs"
+                      style={{ color: "rgba(245, 245, 245, 0.5)" }}
+                    >
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>{new Date(post.createdAt).toLocaleString()}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  className="prose prose-invert max-w-none text-sm overflow-y-auto pr-1 flex-1"
+                  style={{
+                    maxHeight: "280px",
+                    color: "rgba(245, 245, 245, 0.8)",
+                  }}
+                  dangerouslySetInnerHTML={{
+                    __html: post.content.replace(
+                      /<a[^>]+href=["']?(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})).*?<\/a>/g,
+                      (_, url, videoId) => `
         <iframe
           style="width: 100%; aspect-ratio: 16/9; border-radius: 0.5rem;"
           src="https://www.youtube.com/embed/${videoId}"
@@ -223,27 +342,38 @@ const PostsSection = () => {
           allowfullscreen
         ></iframe>
       `
-                  ),
+                    ),
+                  }}
+                />
+              </div>
+            ))}
+
+            {isLoading && (
+              <div className="col-span-full flex justify-center py-4">
+                <Loading />
+              </div>
+            )}
+
+            {hasMore && (
+              <div
+                className="pointer-events-none absolute bottom-0 left-0 w-full h-16"
+                style={{
+                  background: "linear-gradient(to top, #1E2832, transparent)",
                 }}
               />
-            </div>
-          ))}
-
-          {isLoading && (
-            <div className="col-span-full flex justify-center py-4">
-              <Loading />
-            </div>
-          )}
-
-          {hasMore && (
-            <div className="pointer-events-none absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-[#f9f9f9] to-transparent" />
-          )}
+            )}
+          </div>
         </div>
       </section>
 
+      {/* Modal */}
       {selectedPost && (
         <div
-          className="fixed inset-0 flex items-center justify-center z-50 p-4 backdrop-blur-sm bg-black/40 text-[#4a4a4a]"
+          className="fixed inset-0 flex items-center justify-center z-50 p-4"
+          style={{
+            background: "rgba(10, 20, 30, 0.95)",
+            backdropFilter: "blur(10px)",
+          }}
           onClick={() => {
             setSelectedPost(null);
             const params = new URLSearchParams(window.location.search);
@@ -251,22 +381,67 @@ const PostsSection = () => {
             window.history.pushState({}, "", `${window.location.pathname}?${params}`);
           }}
         >
+          {/* Close button */}
+          <button
+            className="absolute top-6 right-6 w-12 h-12 flex items-center justify-center transition-all duration-300"
+            style={{
+              border: "1px solid rgba(209, 176, 70, 0.3)",
+              color: "#D1B046",
+            }}
+            onMouseEnter={(e) => {
+              gsap.to(e.currentTarget, {
+                borderColor: "rgba(209, 176, 70, 0.8)",
+                duration: 0.3,
+              });
+            }}
+            onMouseLeave={(e) => {
+              gsap.to(e.currentTarget, {
+                borderColor: "rgba(209, 176, 70, 0.3)",
+                duration: 0.3,
+              });
+            }}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
           <div
-            className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6"
+            className="max-w-2xl w-full max-h-[90vh] overflow-y-auto p-8"
+            style={{
+              background: "linear-gradient(145deg, rgba(45, 58, 74, 0.95) 0%, rgba(30, 40, 50, 0.95) 100%)",
+              border: "1px solid rgba(209, 176, 70, 0.2)",
+              borderRadius: "2px",
+            }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center gap-4 mb-4">
-              <Image
-                src={selectedPost.author.instagramProfilePictureUrl}
-                alt={selectedPost.author.instagramUsername}
-                width={48}
-                height={48}
-                className="w-12 h-12 rounded-full object-cover border"
-              />
+            <div className="flex items-center gap-4 mb-6">
+              <div
+                className="relative w-14 h-14 rounded-full overflow-hidden"
+                style={{ border: "2px solid rgba(209, 176, 70, 0.4)" }}
+              >
+                <Image
+                  src={`https://unavatar.io/instagram/${selectedPost.author.instagramUsername}`}
+                  alt={selectedPost.author.instagramUsername}
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              </div>
               <div>
-                <span className="font-semibold">@{selectedPost.author.instagramUsername}</span>
-                <div className="flex items-center gap-1 text-gray-500 text-xs">
-                  <FontAwesomeIcon icon={faClock} />
+                <span
+                  className="text-base font-medium"
+                  style={{ color: "#F5F5F5" }}
+                >
+                  @{selectedPost.author.instagramUsername}
+                </span>
+                <div
+                  className="flex items-center gap-1 text-xs"
+                  style={{ color: "rgba(245, 245, 245, 0.5)" }}
+                >
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
                   <span>{new Date(selectedPost.createdAt).toLocaleString()}</span>
                 </div>
               </div>
@@ -278,13 +453,36 @@ const PostsSection = () => {
                 navigator.clipboard.writeText(shareUrl);
                 toast.success("Link do post copiado com sucesso!");
               }}
-              className="flex items-center gap-2 text-sm bg-[#D1B046] hover:bg-yellow-500 text-[#4a4a4a] font-semibold px-3 py-1 rounded shadow transition-transform hover:scale-105 active:scale-95 mb-4 hover:cursor-pointer"
+              className="flex items-center gap-2 text-xs tracking-[0.1em] uppercase px-4 py-2 mb-6 transition-all duration-300"
+              style={{
+                border: "1px solid rgba(209, 176, 70, 0.4)",
+                color: "#D1B046",
+                background: "transparent",
+              }}
+              onMouseEnter={(e) => {
+                gsap.to(e.currentTarget, {
+                  backgroundColor: "#D1B046",
+                  color: "#1E2832",
+                  duration: 0.3,
+                });
+              }}
+              onMouseLeave={(e) => {
+                gsap.to(e.currentTarget, {
+                  backgroundColor: "transparent",
+                  color: "#D1B046",
+                  duration: 0.3,
+                });
+              }}
             >
-              <FontAwesomeIcon icon={faShareAlt} />
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              </svg>
+              Compartilhar
             </button>
 
             <div
-              className="prose prose-neutral max-w-none text-sm text-[#4a4a4a]"
+              className="prose prose-invert max-w-none text-sm"
+              style={{ color: "rgba(245, 245, 245, 0.8)" }}
               dangerouslySetInnerHTML={{
                 __html: selectedPost.content
                   .replace(/<oembed url=["']?(.*?)["']?><\/oembed>/g, (_, url) => {

@@ -1,3 +1,5 @@
+"use client";
+
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -47,59 +49,46 @@ const TeamSection = () => {
     if (!section || !columnsContainer) return;
 
     const ctx = gsap.context(() => {
+      // Header animation
       gsap.fromTo(
-        section.querySelector(".team-title"),
-        { autoAlpha: 0, y: 30 },
+        ".team-header",
+        { opacity: 0, y: 30 },
         {
-          autoAlpha: 1,
+          opacity: 1,
           y: 0,
-          duration: 0.6,
+          duration: 1,
           ease: "power3.out",
           scrollTrigger: {
             trigger: section,
             start: "top 80%",
-            toggleActions: "play none none reset",
-          },
-        }
-      );
-
-      gsap.fromTo(
-        section.querySelector(".team-description"),
-        { autoAlpha: 0, y: 20 },
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.6,
-          ease: "power3.out",
-          delay: 0.15,
-          scrollTrigger: {
-            trigger: section,
-            start: "top 80%",
-            toggleActions: "play none none reset",
           },
         }
       );
 
       const cards = columnsContainer.querySelectorAll(".team-card");
 
-      gsap.fromTo(
-        cards,
-        { autoAlpha: 0, y: 40, scale: 0.95 },
-        {
-          autoAlpha: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.6,
-          ease: "power3.out",
-          stagger: 0.25,
-          delay: 0.3,
-          scrollTrigger: {
-            trigger: section,
-            start: isMobile ? "top 90%" : "top 75%",
-            toggleActions: "play none none reset",
-          },
-        }
-      );
+      cards.forEach((card, index) => {
+        const row = Math.floor(index / 3);
+        const col = index % 3;
+        const delay = (row + col) * 0.1;
+
+        gsap.fromTo(
+          card,
+          { opacity: 0, y: 50, scale: 0.95 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.7,
+            delay: delay,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: section,
+              start: isMobile ? "top 90%" : "top 70%",
+            },
+          }
+        );
+      });
     }, section);
 
     return () => ctx.revert();
@@ -109,49 +98,100 @@ const TeamSection = () => {
     <section
       id="equipe"
       ref={sectionRef}
-      className="py-20 text-center overflow-hidden"
-      style={{ backgroundColor: "#4a4a4a" }}
+      className="relative py-24 md:py-32 text-center overflow-hidden"
+      style={{
+        background: "linear-gradient(180deg, #2D3A4A 0%, #1E2832 50%, #2D3A4A 100%)",
+      }}
     >
-      <h2 className="team-title text-4xl font-bold mb-4" style={{ color: "#D1B046" }}>
-        Nossa Equipe
-      </h2>
-      <p className="team-description text-lg max-w-xl mx-auto mb-16" style={{ color: "#f9f9f9" }}>
-        Conheça as pessoas por trás do nosso trabalho.
-      </p>
+      {/* Decorative elements */}
+      <div
+        className="absolute w-[600px] h-[600px] rounded-full opacity-15 blur-3xl pointer-events-none"
+        style={{
+          background: "radial-gradient(circle, rgba(209, 176, 70, 0.1) 0%, transparent 70%)",
+          top: "-200px",
+          left: "-200px",
+        }}
+      />
+      <div
+        className="absolute w-[400px] h-[400px] rounded-full opacity-10 blur-3xl pointer-events-none"
+        style={{
+          background: "radial-gradient(circle, rgba(209, 176, 70, 0.1) 0%, transparent 70%)",
+          bottom: "-100px",
+          right: "-100px",
+        }}
+      />
 
-      <div ref={columnsContainerRef} className="px-4 max-w-6xl mx-auto">
-        {isMobile ? (
-          <div className="flex flex-col gap-6 items-center">
-            {[...columns.fixed, ...columns.remaining].map((member, index) =>
-              member ? (
-                <div key={`mobile-${index}`} className="team-card w-full flex justify-center">
-                  <TeamCard {...member} />
+      <div className="relative z-10 max-w-6xl mx-auto px-8">
+        {/* Header */}
+        <div className="team-header mb-16">
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <div
+              className="w-12 h-[1px]"
+              style={{ background: "linear-gradient(90deg, transparent, #D1B046)" }}
+            />
+            <span
+              className="text-xs tracking-[0.3em] uppercase font-light"
+              style={{ color: "#D1B046" }}
+            >
+              Profissionais
+            </span>
+            <div
+              className="w-12 h-[1px]"
+              style={{ background: "linear-gradient(90deg, #D1B046, transparent)" }}
+            />
+          </div>
+
+          <h2
+            className="text-4xl md:text-5xl font-extralight mb-4"
+            style={{ color: "#F5F5F5" }}
+          >
+            Nossa{" "}
+            <span style={{ color: "#D1B046", fontWeight: 300 }}>Equipe</span>
+          </h2>
+
+          <p
+            className="text-base md:text-lg font-light max-w-xl mx-auto"
+            style={{ color: "rgba(245, 245, 245, 0.6)" }}
+          >
+            Conheça os profissionais dedicados ao seu bem-estar e recuperação.
+          </p>
+        </div>
+
+        {/* Team Grid */}
+        <div ref={columnsContainerRef}>
+          {isMobile ? (
+            <div className="flex flex-col gap-8 items-center">
+              {[...columns.fixed, ...columns.remaining].map((member, index) =>
+                member ? (
+                  <div key={`mobile-${index}`} className="team-card flex justify-center">
+                    <TeamCard {...member} />
+                  </div>
+                ) : null
+              )}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+              {columns.grid.map((col, i) => (
+                <div
+                  key={i}
+                  className={`flex flex-col gap-8 items-center ${i === 1 ? "md:mt-16" : ""}`}
+                >
+                  {col.map(
+                    (member, index) =>
+                      member && (
+                        <div
+                          key={`col-${i}-${index}`}
+                          className="team-card flex justify-center"
+                        >
+                          <TeamCard {...member} />
+                        </div>
+                      )
+                  )}
                 </div>
-              ) : null
-            )}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-            {columns.grid.map((col, i) => (
-              <div
-                key={i}
-                className={`flex flex-col gap-6 items-center ${i === 1 ? "md:mt-12" : ""}`}
-              >
-                {col.map(
-                  (member, index) =>
-                    member && (
-                      <div
-                        key={`col-${i}-${index}`}
-                        className="team-card w-full flex justify-center"
-                      >
-                        <TeamCard {...member} />
-                      </div>
-                    )
-                )}
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );

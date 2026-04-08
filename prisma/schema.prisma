@@ -20,11 +20,8 @@ model User {
   password String
   role     String // "admin" | "user"
 
-  instagramAccessToken       String?
-  instagramUsername          String? 
-  instagramProfilePictureUrl String? 
-  instagramAccountType       String? // Tipo de conta (BUSINESS, CREATOR, etc)
-  Post                       Post[]
+  instagramUsername String?
+  Post              Post[]
 }
 
 model Post {

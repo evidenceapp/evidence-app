@@ -7,7 +7,7 @@ import Galery from "@/components/Galery";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import HorizontalRoadmap from "@/components/HorizontalRoadmap";
-import ScrollDownHint from "@/components/ScrollDownHint";
+import PostsSection from "@/components/PostsSection";
 import TeamSection from "@/components/TeamSection";
 import WhatsappFloatingButton from "@/components/WhatsappFloatingButton";
 
@@ -15,18 +15,17 @@ export default function HomePage() {
   return (
     <div>
       <Header />
-      <ScrollDownHint />
-      <ContactSection />
       <HeroSection
-        name="Evidence Instituto Clínico"
+        name="Instituto FisioWellness Evidence"
         slogan="Saúde, Reabilitação e Performance"
         buttonText="Agende agora"
       />
       <HorizontalRoadmap />
-      {/* <PostsSection /> */}
+      <ContactSection />
       <Galery />
       <TeamSection />
       <Feedback />
+      <PostsSection />
       <WhatsappFloatingButton />
       <Footer />
     </div>
