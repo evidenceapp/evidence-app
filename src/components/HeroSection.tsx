@@ -190,6 +190,9 @@ const HeroSection = ({ name, slogan, buttonText }: IHeroSection) => {
               border: "1px solid #D1B046",
               color: "#D1B046",
             }}
+            onClick={() => {
+              document.getElementById("agendamento")?.scrollIntoView({ behavior: "smooth" });
+            }}
             onMouseEnter={(e) => {
               gsap.to(e.currentTarget, {
                 background: "#D1B046",

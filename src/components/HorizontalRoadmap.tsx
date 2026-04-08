@@ -734,6 +734,9 @@ const HorizontalRoadmap = () => {
                 color: "#D1B046",
                 background: "transparent",
               }}
+              onClick={() => {
+                document.getElementById("agendamento")?.scrollIntoView({ behavior: "smooth" });
+              }}
               onMouseEnter={(e) => {
                 gsap.to(e.currentTarget, {
                   backgroundColor: "#D1B046",

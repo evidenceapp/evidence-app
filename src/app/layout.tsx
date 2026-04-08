@@ -96,7 +96,7 @@ export default function RootLayout({
               },
               contactPoint: {
                 "@type": "ContactPoint",
-                telephone: "+55-34-9682-0404",
+                telephone: "+55-34-99715-0404",
                 contactType: "customer service",
               },
             }),
