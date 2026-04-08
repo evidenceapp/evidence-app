@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import gsap from "gsap";
 import { toast } from "react-toastify";
 import { ILoginForm } from "@/interfaces";
@@ -317,7 +318,7 @@ const LoginPage = () => {
 
         {/* Back to home link */}
         <div className="login-animate mt-8 text-center">
-          <a
+          <Link
             href="/"
             className="inline-flex items-center gap-2 text-xs tracking-[0.1em] uppercase font-light transition-all duration-300"
             style={{ color: "rgba(245, 245, 245, 0.5)" }}
@@ -338,7 +339,7 @@ const LoginPage = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
             Voltar ao site
-          </a>
+          </Link>
         </div>
       </div>
     </section>

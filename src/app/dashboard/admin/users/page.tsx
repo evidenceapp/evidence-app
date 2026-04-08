@@ -1,6 +1,7 @@
 "use client";
 
 import gsap from "gsap";
+import Link from "next/link";
 import { useEffect, useRef, useState, useCallback } from "react";
 
 import AdminDash from "@/components/dashboard/Admin";
@@ -162,7 +163,7 @@ export default function UsersPage() {
 
         {/* Back link */}
         <div className="user-animate mt-8 pt-6 text-center" style={{ borderTop: "1px solid rgba(209, 176, 70, 0.1)" }}>
-          <a
+          <Link
             href="/"
             className="inline-flex items-center gap-2 text-xs tracking-[0.1em] uppercase font-light transition-all duration-300"
             style={{ color: "rgba(245, 245, 245, 0.5)" }}
@@ -177,7 +178,7 @@ export default function UsersPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
             Voltar ao site
-          </a>
+          </Link>
         </div>
       </div>
     </section>

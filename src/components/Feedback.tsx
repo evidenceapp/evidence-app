@@ -95,7 +95,7 @@ const Feedback = () => {
         className="absolute top-20 left-1/2 -translate-x-1/2 text-[200px] font-serif leading-none pointer-events-none select-none"
         style={{ color: "rgba(209, 176, 70, 0.03)" }}
       >
-        "
+        &ldquo;
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-8">
@@ -203,7 +203,7 @@ const Feedback = () => {
                 className="text-base md:text-lg font-light leading-relaxed mb-8"
                 style={{ color: "rgba(245, 245, 245, 0.8)" }}
               >
-                "{t.feedback}"
+                &ldquo;{t.feedback}&rdquo;
               </p>
 
               {/* Author */}

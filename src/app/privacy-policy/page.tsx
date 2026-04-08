@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 
 export default function PrivacyPolicyPage() {
@@ -56,7 +57,7 @@ export default function PrivacyPolicyPage() {
 
       <div className="privacy-content max-w-3xl mx-auto">
         {/* Back link */}
-        <a
+        <Link
           href="/"
           className="inline-flex items-center gap-2 text-xs tracking-[0.1em] uppercase font-light mb-12 transition-all duration-300"
           style={{ color: "rgba(245, 245, 245, 0.5)" }}
@@ -71,7 +72,7 @@ export default function PrivacyPolicyPage() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
           Voltar ao site
-        </a>
+        </Link>
 
         {/* Header */}
         <div className="privacy-section mb-12">
