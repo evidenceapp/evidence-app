@@ -335,3 +335,80 @@ button {
     border-radius: 2px !important;
   }
 }
+
+/* ===== Premium Hover Effects (CSS-based for performance) ===== */
+
+/* Gold border hover effect */
+.hover-gold-border {
+  transition: border-color 0.3s ease;
+  border: 1px solid rgba(209, 176, 70, 0.2);
+}
+
+.hover-gold-border:hover {
+  border-color: rgba(209, 176, 70, 0.5);
+}
+
+/* Gold text hover effect */
+.hover-gold-text {
+  transition: color 0.3s ease;
+  color: rgba(245, 245, 245, 0.6);
+}
+
+.hover-gold-text:hover {
+  color: #d1b046;
+}
+
+/* Gold button hover effect */
+.hover-gold-button {
+  transition: all 0.3s ease;
+  border: 1px solid #d1b046;
+  color: #d1b046;
+  background: transparent;
+}
+
+.hover-gold-button:hover {
+  background: #d1b046;
+  color: #1e2832;
+}
+
+/* Scale image hover effect */
+.hover-scale-image {
+  transition: transform 0.5s ease;
+}
+
+.group:hover .hover-scale-image {
+  transform: scale(1.08);
+}
+
+/* Overlay fade hover effect */
+.hover-overlay-fade {
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+.group:hover .hover-overlay-fade {
+  opacity: 1;
+}
+
+/* Input focus effect */
+.input-gold-focus {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(209, 176, 70, 0.2);
+}
+
+.input-gold-focus:focus {
+  border-color: rgba(209, 176, 70, 0.5);
+  box-shadow: 0 0 0 1px rgba(209, 176, 70, 0.15);
+  outline: none;
+}
+
+/* Disable animations on mobile for better performance */
+@media (max-width: 768px) {
+  .hover-scale-image {
+    transform: none !important;
+  }
+
+  .group:hover .hover-scale-image {
+    transform: none !important;
+  }
+}

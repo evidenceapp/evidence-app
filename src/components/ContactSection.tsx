@@ -153,22 +153,10 @@ const ContactSection = () => {
                 type="text"
                 {...register("name", { required: "Nome é obrigatório" })}
                 placeholder="Seu nome"
-                className="w-full px-5 py-4 text-sm font-light transition-all duration-300 focus:outline-none"
+                className="w-full px-5 py-4 text-sm font-light input-gold-focus"
                 style={{
                   ...inputStyles,
                   borderRadius: "2px",
-                }}
-                onFocus={(e) => {
-                  gsap.to(e.target, {
-                    borderColor: "rgba(209, 176, 70, 0.5)",
-                    duration: 0.3,
-                  });
-                }}
-                onBlur={(e) => {
-                  gsap.to(e.target, {
-                    borderColor: "rgba(209, 176, 70, 0.2)",
-                    duration: 0.3,
-                  });
                 }}
               />
               {errors.name && (
@@ -189,22 +177,10 @@ const ContactSection = () => {
                 type="email"
                 {...register("email", { required: "Email é obrigatório" })}
                 placeholder="seu@email.com"
-                className="w-full px-5 py-4 text-sm font-light transition-all duration-300 focus:outline-none"
+                className="w-full px-5 py-4 text-sm font-light input-gold-focus"
                 style={{
                   ...inputStyles,
                   borderRadius: "2px",
-                }}
-                onFocus={(e) => {
-                  gsap.to(e.target, {
-                    borderColor: "rgba(209, 176, 70, 0.5)",
-                    duration: 0.3,
-                  });
-                }}
-                onBlur={(e) => {
-                  gsap.to(e.target, {
-                    borderColor: "rgba(209, 176, 70, 0.2)",
-                    duration: 0.3,
-                  });
                 }}
               />
               {errors.email && (
@@ -228,22 +204,10 @@ const ContactSection = () => {
                 type="tel"
                 {...register("phone", { required: "Telefone é obrigatório" })}
                 placeholder="(00) 00000-0000"
-                className="w-full px-5 py-4 text-sm font-light transition-all duration-300 focus:outline-none"
+                className="w-full px-5 py-4 text-sm font-light input-gold-focus"
                 style={{
                   ...inputStyles,
                   borderRadius: "2px",
-                }}
-                onFocus={(e) => {
-                  gsap.to(e.target, {
-                    borderColor: "rgba(209, 176, 70, 0.5)",
-                    duration: 0.3,
-                  });
-                }}
-                onBlur={(e) => {
-                  gsap.to(e.target, {
-                    borderColor: "rgba(209, 176, 70, 0.2)",
-                    duration: 0.3,
-                  });
                 }}
               />
               {errors.phone && (
@@ -346,22 +310,10 @@ const ContactSection = () => {
               rows={4}
               {...register("description")}
               placeholder="Descreva brevemente sua necessidade..."
-              className="w-full px-5 py-4 text-sm font-light transition-all duration-300 focus:outline-none resize-none"
+              className="w-full px-5 py-4 text-sm font-light input-gold-focus resize-none"
               style={{
                 ...inputStyles,
                 borderRadius: "2px",
-              }}
-              onFocus={(e) => {
-                gsap.to(e.target, {
-                  borderColor: "rgba(209, 176, 70, 0.5)",
-                  duration: 0.3,
-                });
-              }}
-              onBlur={(e) => {
-                gsap.to(e.target, {
-                  borderColor: "rgba(209, 176, 70, 0.2)",
-                  duration: 0.3,
-                });
               }}
             />
           </div>
@@ -371,28 +323,7 @@ const ContactSection = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full md:w-auto px-12 py-4 text-xs tracking-[0.2em] uppercase font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 mx-auto"
-              style={{
-                border: "1px solid #D1B046",
-                color: "#D1B046",
-                background: "transparent",
-              }}
-              onMouseEnter={(e) => {
-                if (!isSubmitting) {
-                  gsap.to(e.currentTarget, {
-                    backgroundColor: "#D1B046",
-                    color: "#1E2832",
-                    duration: 0.3,
-                  });
-                }
-              }}
-              onMouseLeave={(e) => {
-                gsap.to(e.currentTarget, {
-                  backgroundColor: "transparent",
-                  color: "#D1B046",
-                  duration: 0.3,
-                });
-              }}
+              className="w-full md:w-auto px-12 py-4 text-xs tracking-[0.2em] uppercase font-medium hover-gold-button disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#D1B046] flex items-center justify-center gap-3 mx-auto"
             >
               {isSubmitting ? (
                 <>
@@ -454,24 +385,10 @@ const ContactSection = () => {
             href="https://wa.me/553496820404"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 px-8 py-3 text-xs tracking-[0.15em] uppercase font-light transition-all duration-300"
+            className="inline-flex items-center gap-3 px-8 py-3 text-xs tracking-[0.15em] uppercase font-light transition-all duration-300 hover:border-[rgba(245,245,245,0.5)] hover:text-[#F5F5F5]"
             style={{
               border: "1px solid rgba(245, 245, 245, 0.2)",
               color: "rgba(245, 245, 245, 0.7)",
-            }}
-            onMouseEnter={(e) => {
-              gsap.to(e.currentTarget, {
-                borderColor: "rgba(245, 245, 245, 0.5)",
-                color: "#F5F5F5",
-                duration: 0.3,
-              });
-            }}
-            onMouseLeave={(e) => {
-              gsap.to(e.currentTarget, {
-                borderColor: "rgba(245, 245, 245, 0.2)",
-                color: "rgba(245, 245, 245, 0.7)",
-                duration: 0.3,
-              });
             }}
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
