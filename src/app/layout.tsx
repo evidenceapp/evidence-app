@@ -2,7 +2,15 @@ import "./globals.css";
 import "react-toastify/dist/ReactToastify.css";
 
 import { Metadata } from "next";
+import { Inter } from "next/font/google";
 import { ToastContainer } from "react-toastify";
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+  weight: ["200", "300", "400", "500", "600"],
+});
 
 export const metadata: Metadata = {
   title: {
@@ -62,8 +70,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
-      <body className="bg-gray-900 text-gray-200 flex flex-col w-full min-h-screen transition-colors duration-300">
+    <html lang="pt-BR" className={inter.variable}>
+      <body className={`${inter.className} bg-gray-900 text-gray-200 flex flex-col w-full min-h-screen transition-colors duration-300`}>
         {children}
         <ToastContainer
           position="top-right"
@@ -75,7 +83,7 @@ export default function RootLayout({
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          theme="light"
+          theme="dark"
         />
         <script
           type="application/ld+json"

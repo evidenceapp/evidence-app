@@ -207,19 +207,21 @@ const Feedback = () => {
               </p>
 
               {/* Author */}
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 md:gap-4">
                 <div
-                  className="relative w-14 h-14 rounded-full overflow-hidden"
+                  className="relative flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden"
                   style={{
                     border: "2px solid rgba(209, 176, 70, 0.4)",
+                    minWidth: "48px",
+                    minHeight: "48px",
                   }}
                 >
                   <Image
                     src={t.image}
                     alt={t.alt}
                     fill
-                    sizes="56px"
-                    className="object-cover"
+                    sizes="(max-width: 768px) 48px, 56px"
+                    className="object-cover rounded-full"
                   />
                 </div>
                 <div>

@@ -200,18 +200,77 @@ const Galery = () => {
                     src={src}
                     alt={`Galeria ${index + 1}`}
                     fill
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                    loading="lazy"
                     className="media-content object-cover"
                   />
                 ) : (
-                  <video
-                    src={src}
-                    className="media-content w-full h-full object-cover"
-                    loop
-                    muted
-                    playsInline
-                    onMouseEnter={(e) => e.currentTarget.play()}
-                    onMouseLeave={(e) => e.currentTarget.pause()}
-                  />
+                  <>
+                    {/* Video background placeholder */}
+                    <div
+                      className="absolute inset-0 flex items-center justify-center"
+                      style={{
+                        background: "linear-gradient(145deg, #2D3A4A 0%, #1E2832 100%)",
+                      }}
+                    >
+                      <svg
+                        className="w-12 h-12 opacity-30"
+                        fill="none"
+                        stroke="#D1B046"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="1"
+                          d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                        />
+                      </svg>
+                    </div>
+                    <video
+                      src={src}
+                      className="media-content w-full h-full object-cover relative z-[1]"
+                      loop
+                      muted
+                      playsInline
+                      preload="metadata"
+                      poster=""
+                      onLoadedData={(e) => {
+                        // Force show first frame
+                        const video = e.currentTarget;
+                        video.currentTime = 0.1;
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.play()}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.pause();
+                        e.currentTarget.currentTime = 0.1;
+                      }}
+                    />
+                    {/* Mobile play indicator - always visible */}
+                    <div
+                      className="absolute inset-0 z-[2] flex items-center justify-center md:hidden pointer-events-none"
+                      style={{
+                        background: "rgba(30, 40, 50, 0.3)",
+                      }}
+                    >
+                      <div
+                        className="w-10 h-10 rounded-full flex items-center justify-center"
+                        style={{
+                          background: "rgba(209, 176, 70, 0.2)",
+                          border: "1px solid rgba(209, 176, 70, 0.5)",
+                          backdropFilter: "blur(4px)",
+                        }}
+                      >
+                        <svg
+                          className="w-4 h-4 ml-0.5"
+                          fill="#D1B046"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                    </div>
+                  </>
                 )}
 
                 {/* Hover overlay */}

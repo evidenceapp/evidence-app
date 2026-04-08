@@ -123,16 +123,17 @@ export default function PrivacyPolicyPage() {
 
           <Section number="2" title="Informações que Coletamos">
             <p className="mb-4">
-              Quando os fisioterapeutas utilizam o login via Instagram, coletamos <strong>apenas</strong> as seguintes
-              informações, com consentimento prévio:
+              Quando os fisioterapeutas acessam a plataforma, coletamos <strong>apenas</strong> as seguintes
+              informações:
             </p>
             <ul>
-              <li>O nome de usuário do Instagram (@)</li>
-              <li>A foto de perfil pública do Instagram</li>
+              <li>Nome de usuário para acesso ao sistema</li>
+              <li>Nome de usuário do Instagram (opcional, informado pelo próprio usuário)</li>
             </ul>
             <p className="mt-4">
-              Nenhuma outra informação, como e-mail, lista de seguidores ou mensagens privadas, é coletada
-              ou armazenada pela plataforma.
+              Caso o usuário informe seu @ do Instagram, utilizamos um serviço público (unavatar.io) para
+              exibir a foto de perfil pública associada. <strong>Não acessamos nem armazenamos</strong> nenhuma
+              informação privada do Instagram, como e-mail, seguidores ou mensagens.
             </p>
           </Section>
 
@@ -148,7 +149,7 @@ export default function PrivacyPolicyPage() {
             <p className="mb-4">Os dados coletados são utilizados para:</p>
             <ul>
               <li>Identificar fisioterapeutas credenciados na plataforma</li>
-              <li>Exibir corretamente o nome de usuário e a foto de perfil do Instagram</li>
+              <li>Exibir a foto de perfil pública do Instagram (quando informado)</li>
               <li>Melhorar a qualidade do atendimento com base nas métricas internas do formulário</li>
             </ul>
           </Section>
@@ -156,8 +157,8 @@ export default function PrivacyPolicyPage() {
           <Section number="5" title="Compartilhamento de Dados">
             <p>
               Não compartilhamos suas informações pessoais com terceiros, exceto quando necessário para
-              cumprir obrigações legais. O login via Instagram utiliza a integração oficial fornecida pela
-              Meta, e os dados acessados respeitam as permissões autorizadas por você.
+              cumprir obrigações legais. A exibição da foto de perfil do Instagram é feita através de
+              um serviço público que acessa apenas informações já disponíveis publicamente.
             </p>
           </Section>
 

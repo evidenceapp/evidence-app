@@ -59,8 +59,8 @@ const TeamCard: React.FC<TeamCardProps> = ({ name, description, instagram, image
         src={image}
         alt={name}
         fill
-        priority={true}
-        sizes="256px"
+        sizes="(max-width: 768px) 200px, 256px"
+        loading="lazy"
         className="card-image object-cover"
       />
 
