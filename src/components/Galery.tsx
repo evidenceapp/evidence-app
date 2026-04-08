@@ -89,7 +89,6 @@ const Galery = () => {
           background: "linear-gradient(180deg, #2D3A4A 0%, #1E2832 100%)",
         }}
       >
-        {/* Decorative elements */}
         <div
           className="absolute w-[500px] h-[500px] rounded-full opacity-15 blur-3xl pointer-events-none"
           style={{
@@ -108,7 +107,6 @@ const Galery = () => {
         />
 
         <div className="relative z-10 max-w-6xl mx-auto px-8">
-          {/* Header */}
           <div className="gallery-header text-center mb-16">
             <div className="flex items-center justify-center gap-3 mb-6">
               <div
@@ -127,10 +125,7 @@ const Galery = () => {
               />
             </div>
 
-            <h2
-              className="text-4xl md:text-5xl font-extralight mb-4"
-              style={{ color: "#F5F5F5" }}
-            >
+            <h2 className="text-4xl md:text-5xl font-extralight mb-4" style={{ color: "#F5F5F5" }}>
               Galeria
             </h2>
 
@@ -142,14 +137,14 @@ const Galery = () => {
             </p>
           </div>
 
-          {/* Gallery Grid - No gaps, uniform grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
             {galeryMedia.map(({ src, type }, index) => (
               <div
                 key={index}
-                className="gallery-item relative overflow-hidden cursor-pointer group aspect-square"
+                className="gallery-item relative overflow-hidden cursor-pointer group aspect-[3/4] md:aspect-[4/5] bg-[#1E2832]"
                 style={{
-                  borderRadius: "2px",
+                  borderRadius: "10px",
+                  boxShadow: "0 12px 30px rgba(10, 20, 30, 0.25)",
                 }}
                 onClick={() => {
                   setSelectedMedia(src);
@@ -161,7 +156,7 @@ const Galery = () => {
                     duration: 0.3,
                   });
                   gsap.to(e.currentTarget.querySelector(".media-content"), {
-                    scale: 1.08,
+                    scale: 1.04,
                     duration: 0.5,
                     ease: "power2.out",
                   });
@@ -186,7 +181,6 @@ const Galery = () => {
                   });
                 }}
               >
-                {/* Border frame */}
                 <div
                   className="absolute inset-0 z-10 pointer-events-none transition-colors duration-300"
                   style={{
@@ -194,7 +188,6 @@ const Galery = () => {
                   }}
                 />
 
-                {/* Media content */}
                 {type === "image" ? (
                   <Image
                     src={src}
@@ -202,11 +195,10 @@ const Galery = () => {
                     fill
                     sizes="(max-width: 768px) 50vw, 25vw"
                     loading="lazy"
-                    className="media-content object-cover"
+                    className="media-content object-cover object-center transition-transform duration-700"
                   />
                 ) : (
                   <>
-                    {/* Video background placeholder */}
                     <div
                       className="absolute inset-0 flex items-center justify-center"
                       style={{
@@ -229,7 +221,7 @@ const Galery = () => {
                     </div>
                     <video
                       src={src}
-                      className="media-content w-full h-full object-cover relative z-[1]"
+                      className="media-content w-full h-full object-cover object-center relative z-[1] transition-transform duration-700"
                       loop
                       muted
                       playsInline
@@ -246,7 +238,6 @@ const Galery = () => {
                         e.currentTarget.currentTime = 0.1;
                       }}
                     />
-                    {/* Mobile play indicator - always visible */}
                     <div
                       className="absolute inset-0 z-[2] flex items-center justify-center md:hidden pointer-events-none"
                       style={{
@@ -261,11 +252,7 @@ const Galery = () => {
                           backdropFilter: "blur(4px)",
                         }}
                       >
-                        <svg
-                          className="w-4 h-4 ml-0.5"
-                          fill="#D1B046"
-                          viewBox="0 0 24 24"
-                        >
+                        <svg className="w-4 h-4 ml-0.5" fill="#D1B046" viewBox="0 0 24 24">
                           <path d="M8 5v14l11-7z" />
                         </svg>
                       </div>
@@ -273,11 +260,11 @@ const Galery = () => {
                   </>
                 )}
 
-                {/* Hover overlay */}
                 <div
                   className="media-overlay absolute inset-0 z-20 flex items-center justify-center opacity-0"
                   style={{
-                    background: "linear-gradient(180deg, rgba(30, 40, 50, 0.2) 0%, rgba(30, 40, 50, 0.7) 100%)",
+                    background:
+                      "linear-gradient(180deg, rgba(30, 40, 50, 0.05) 0%, rgba(30, 40, 50, 0.78) 100%)",
                   }}
                 >
                   <div
@@ -289,20 +276,11 @@ const Galery = () => {
                     }}
                   >
                     {type === "video" ? (
-                      <svg
-                        className="w-5 h-5 ml-0.5"
-                        fill="#D1B046"
-                        viewBox="0 0 24 24"
-                      >
+                      <svg className="w-5 h-5 ml-0.5" fill="#D1B046" viewBox="0 0 24 24">
                         <path d="M8 5v14l11-7z" />
                       </svg>
                     ) : (
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="#D1B046"
-                        viewBox="0 0 24 24"
-                      >
+                      <svg className="w-5 h-5" fill="none" stroke="#D1B046" viewBox="0 0 24 24">
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -314,7 +292,6 @@ const Galery = () => {
                   </div>
                 </div>
 
-                {/* Video indicator */}
                 {type === "video" && (
                   <div
                     className="absolute bottom-3 right-3 z-10 px-2 py-1 text-[10px] tracking-[0.1em] uppercase"
@@ -333,7 +310,6 @@ const Galery = () => {
         </div>
       </section>
 
-      {/* Lightbox Modal */}
       {selectedMedia && (
         <div
           className="fixed inset-0 flex items-center justify-center z-50 p-4"
@@ -346,7 +322,6 @@ const Galery = () => {
             setIsVideo(false);
           }}
         >
-          {/* Close button */}
           <button
             className="absolute top-6 right-6 w-12 h-12 flex items-center justify-center transition-all duration-300"
             style={{
@@ -366,12 +341,7 @@ const Galery = () => {
               });
             }}
           >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -381,11 +351,7 @@ const Galery = () => {
             </svg>
           </button>
 
-          {/* Media container */}
-          <div
-            className="relative"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="relative" onClick={(e) => e.stopPropagation()}>
             {isVideo ? (
               <video
                 src={selectedMedia}
@@ -410,7 +376,6 @@ const Galery = () => {
             )}
           </div>
 
-          {/* Instructions */}
           <div
             className="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs tracking-[0.15em] uppercase"
             style={{ color: "rgba(245, 245, 245, 0.4)" }}
