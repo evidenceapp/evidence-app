@@ -2,7 +2,7 @@
 
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import { useCallback, useEffect, useRef } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -10,8 +10,8 @@ gsap.registerPlugin(ScrollTrigger);
 interface InfrastructureItem {
   id: string;
   title: string;
-  sketch: string;
-  image: string;
+  sketch: string | StaticImageData;
+  image: string | StaticImageData;
 }
 
 interface InfrastructureSectionProps {
@@ -108,7 +108,6 @@ const InfrastructureSection = ({ description, items }: InfrastructureSectionProp
       );
     }, sectionRef);
 
-    
     const checkMobile = () => {
       isMobileRef.current = window.innerWidth < 768;
       if (isMobileRef.current) {
@@ -219,15 +218,19 @@ const InfrastructureSection = ({ description, items }: InfrastructureSectionProp
                     }}
                     className="pointer-events-none absolute inset-0"
                     style={{
-                      backgroundImage: `url(${item.image})`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
                       clipPath: "circle(0% at 100% 100%)",
                       WebkitClipPath: "circle(0% at 100% 100%)",
                       transform: "translateZ(0)",
                       willChange: "clip-path",
                     }}
                   >
+                    <Image
+                      src={item.image}
+                      alt={`${item.title} ambiente`}
+                      fill
+                      sizes="(max-width: 1080px) 100vw, (max-width: 1920px) 50vw, 33vw"
+                      className="object-cover"
+                    />
                     <span className="sr-only">{item.title}</span>
                   </div>
 

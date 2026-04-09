@@ -4,6 +4,16 @@ import dynamic from "next/dynamic";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import WhatsappFloatingButton from "@/components/WhatsappFloatingButton";
+import sketch1 from "../../public/sketches/1.png";
+import sketch2 from "../../public/sketches/2.png";
+import sketch3 from "../../public/sketches/3.png";
+import sketch4 from "../../public/sketches/4.png";
+import sketch5 from "../../public/sketches/5.png";
+import image1 from "../../public/images/1.png";
+import image2 from "../../public/images/2.png";
+import image3 from "../../public/images/3.png";
+import image4 from "../../public/images/4.png";
+import image5 from "../../public/images/5.png";
 
 const HorizontalRoadmap = dynamic(() => import("@/components/HorizontalRoadmap"), {
   loading: () => <div className="h-96" />,
@@ -46,32 +56,32 @@ export default function HomePage() {
           {
             id: "sala-1",
             title: "Fachada",
-            sketch: "/sketches/1.png",
-            image: "/images/1.png",
+            sketch: sketch1,
+            image: image1,
           },
           {
             id: "sala-2",
             title: "Recepção",
-            sketch: "/sketches/2.png",
-            image: "/images/2.png",
+            sketch: sketch2,
+            image: image2,
           },
           {
             id: "sala-3",
             title: "Fisioterapia",
-            sketch: "/sketches/3.png",
-            image: "/images/3.png",
+            sketch: sketch3,
+            image: image3,
           },
           {
             id: "sala-4",
             title: "Recuperação",
-            sketch: "/sketches/4.png",
-            image: "/images/4.png",
+            sketch: sketch4,
+            image: image4,
           },
           {
             id: "sala-5",
             title: "Pilates",
-            sketch: "/sketches/5.png",
-            image: "/images/5.png",
+            sketch: sketch5,
+            image: image5,
           },
         ]}
       />
