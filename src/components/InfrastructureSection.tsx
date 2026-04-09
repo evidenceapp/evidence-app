@@ -2,7 +2,8 @@
 
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import { useEffect, useRef } from "react";
+import Image from "next/image";
+import { useCallback, useEffect, useRef } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,6 +24,35 @@ const InfrastructureSection = ({ description, items }: InfrastructureSectionProp
   const revealLayerRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const isMobileRef = useRef(false);
   const autoAnimateTimeoutsRef = useRef<Record<string, NodeJS.Timeout>>({});
+
+  const scheduleAutoAnimate = useCallback((id: string) => {
+    if (autoAnimateTimeoutsRef.current[id]) {
+      clearTimeout(autoAnimateTimeoutsRef.current[id]);
+    }
+
+    const layer = revealLayerRefs.current[id];
+    if (!layer) return;
+
+    gsap.killTweensOf([layer]);
+    gsap.to(layer, {
+      clipPath: "circle(150% at 100% 100%)",
+      duration: 0.4,
+      ease: "power2.out",
+    });
+
+    autoAnimateTimeoutsRef.current[id] = setTimeout(() => {
+      gsap.killTweensOf([layer]);
+      gsap.to(layer, {
+        clipPath: "circle(0% at 100% 100%)",
+        duration: 0.35,
+        ease: "power2.in",
+      });
+
+      autoAnimateTimeoutsRef.current[id] = setTimeout(() => {
+        scheduleAutoAnimate(id);
+      }, 2500);
+    }, 1800);
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -99,36 +129,7 @@ const InfrastructureSection = ({ description, items }: InfrastructureSectionProp
       window.removeEventListener("resize", checkMobile);
       Object.values(autoAnimateTimeoutsRef.current).forEach((timeout) => clearTimeout(timeout));
     };
-  }, [items]);
-
-  const scheduleAutoAnimate = (id: string) => {
-    if (autoAnimateTimeoutsRef.current[id]) {
-      clearTimeout(autoAnimateTimeoutsRef.current[id]);
-    }
-
-    const layer = revealLayerRefs.current[id];
-    if (!layer) return;
-
-    gsap.killTweensOf([layer]);
-    gsap.to(layer, {
-      clipPath: "circle(150% at 100% 100%)",
-      duration: 0.4,
-      ease: "power2.out",
-    });
-
-    autoAnimateTimeoutsRef.current[id] = setTimeout(() => {
-      gsap.killTweensOf([layer]);
-      gsap.to(layer, {
-        clipPath: "circle(0% at 100% 100%)",
-        duration: 0.35,
-        ease: "power2.in",
-      });
-
-      autoAnimateTimeoutsRef.current[id] = setTimeout(() => {
-        scheduleAutoAnimate(id);
-      }, 2500);
-    }, 1800);
-  };
+  }, [items, scheduleAutoAnimate]);
 
   const handleCardMouseEnter = (id: string) => {
     if (isMobileRef.current) return;
@@ -201,20 +202,15 @@ const InfrastructureSection = ({ description, items }: InfrastructureSectionProp
                     borderRadius: "10px",
                     boxShadow: "0 12px 30px rgba(10, 20, 30, 0.25)",
                   }}
-                  onMouseEnter={(e) => {
-                    handleCardMouseEnter(item.id);
-                  }}
-                  onMouseLeave={(e) => {
-                    handleCardMouseLeave(item.id);
-                  }}
+                  onMouseEnter={() => handleCardMouseEnter(item.id)}
+                  onMouseLeave={() => handleCardMouseLeave(item.id)}
                 >
-                  <img
+                  <Image
                     src={item.sketch}
                     alt={`${item.title} sketch`}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    style={{
-                      transform: "translateZ(0)",
-                    }}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover"
                   />
 
                   <div
