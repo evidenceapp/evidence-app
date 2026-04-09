@@ -2,7 +2,7 @@
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -49,143 +49,52 @@ const journeySteps = [
   },
 ];
 
-// Elegant Walking Figure Component
-const WalkingFigure = ({ progress }: { progress: number }) => {
-  // Posture improves with progress
-  const bodyTilt = 20 - progress * 20; // starts hunched, becomes upright
-  const caneOpacity = 1 - progress * 1.5; // cane fades away
-  const armSwing = Math.sin(progress * Math.PI * 8) * 10; // walking motion
-
-  return (
-    <svg viewBox="0 0 40 50" className="w-full h-full" style={{ overflow: "visible" }}>
-      {/* Glow under feet when recovered */}
-      {progress > 0.7 && (
-        <ellipse
-          cx="20"
-          cy="48"
-          rx="8"
-          ry="2"
-          fill="#D1B046"
-          opacity={(progress - 0.7) * 2}
-          style={{ filter: "blur(2px)" }}
-        />
-      )}
-
-      {/* Main figure group */}
-      <g
-        style={{
-          transformOrigin: "20px 48px",
-          transform: `rotate(${-bodyTilt}deg)`,
-          transition: "transform 0.3s ease-out",
-        }}
-      >
-        {/* Head */}
-        <circle cx="20" cy="8" r="5" fill="#D1B046" opacity={0.8 + progress * 0.2} />
-
-        {/* Body */}
-        <line
-          x1="20"
-          y1="13"
-          x2="20"
-          y2="28"
-          stroke="#D1B046"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          opacity={0.8 + progress * 0.2}
-        />
-
-        {/* Left arm */}
-        <line
-          x1="20"
-          y1="16"
-          x2={12 + armSwing * 0.3}
-          y2={22 - progress * 5}
-          stroke="#D1B046"
-          strokeWidth="2"
-          strokeLinecap="round"
-          opacity={0.7 + progress * 0.3}
-        />
-
-        {/* Right arm */}
-        <line
-          x1="20"
-          y1="16"
-          x2={28 - armSwing * 0.3}
-          y2={22 - progress * 5}
-          stroke="#D1B046"
-          strokeWidth="2"
-          strokeLinecap="round"
-          opacity={0.7 + progress * 0.3}
-        />
-
-        {/* Left leg */}
-        <line
-          x1="20"
-          y1="28"
-          x2={15 + armSwing * 0.2}
-          y2="42"
-          stroke="#D1B046"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          opacity={0.8}
-        />
-
-        {/* Right leg */}
-        <line
-          x1="20"
-          y1="28"
-          x2={25 - armSwing * 0.2}
-          y2="42"
-          stroke="#D1B046"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          opacity={0.8}
-        />
-
-        {/* Cane (fades with progress) */}
-        {caneOpacity > 0 && (
-          <line
-            x1="12"
-            y1="20"
-            x2="8"
-            y2="42"
-            stroke="#D1B046"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            opacity={Math.max(0, caneOpacity) * 0.6}
-          />
-        )}
-      </g>
-
-      {/* Pain indicator (fades with progress) */}
-      {progress < 0.5 && (
-        <g opacity={(0.5 - progress) * 2}>
-          <circle cx="30" cy="32" r="4" fill="#E07A5F" opacity="0.4">
-            <animate attributeName="r" values="3;5;3" dur="1s" repeatCount="indefinite" />
-          </circle>
-          <circle cx="30" cy="32" r="2" fill="#E07A5F" opacity="0.7" />
-        </g>
-      )}
-
-      {/* Victory sparkles when recovered */}
-      {progress > 0.85 && (
-        <g opacity={(progress - 0.85) * 6}>
-          <circle cx="10" cy="5" r="1" fill="#D1B046" />
-          <circle cx="30" cy="3" r="1" fill="#D1B046" />
-          <circle cx="6" cy="15" r="0.8" fill="#D1B046" />
-          <circle cx="34" cy="12" r="0.8" fill="#D1B046" />
-        </g>
-      )}
-    </svg>
-  );
-};
-
 const HorizontalRoadmap = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
+  const progressVideoRef = useRef<HTMLVideoElement>(null);
+  const scrollProgressRef = useRef(0);
   const [activeCard, setActiveCard] = useState<number>(-1);
   const [scrollProgress, setScrollProgress] = useState<number>(0);
+  const [shouldLoadProgressVideo, setShouldLoadProgressVideo] = useState(false);
+
+  const syncProgressVideo = useCallback((progressValue: number) => {
+    const video = progressVideoRef.current;
+
+    if (!video || !Number.isFinite(video.duration) || video.duration <= 0) {
+      return;
+    }
+
+    const targetTime = video.duration * progressValue;
+
+    if (Math.abs(video.currentTime - targetTime) > 0.033) {
+      video.currentTime = targetTime;
+    }
+  }, []);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+
+    if (!section || shouldLoadProgressVideo) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setShouldLoadProgressVideo(true);
+          observer.disconnect();
+        }
+      },
+      {
+        rootMargin: "350px 0px",
+        threshold: 0.01,
+      }
+    );
+
+    observer.observe(section);
+
+    return () => observer.disconnect();
+  }, [shouldLoadProgressVideo]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -235,7 +144,9 @@ const HorizontalRoadmap = () => {
           }
 
           // Update scroll progress for figure animation
+          scrollProgressRef.current = self.progress;
           setScrollProgress(self.progress);
+          syncProgressVideo(self.progress);
 
           // Update active card based on scroll progress
           const cardIndex = Math.floor(self.progress * journeySteps.length);
@@ -302,7 +213,7 @@ const HorizontalRoadmap = () => {
     }, section);
 
     return () => ctx.revert();
-  }, []);
+  }, [syncProgressVideo]);
 
   return (
     <section
@@ -363,7 +274,7 @@ const HorizontalRoadmap = () => {
       </div>
 
       {/* Header Section */}
-      <div className="roadmap-header relative z-10 pt-24 pb-8 px-8 max-w-6xl mx-auto">
+      <div className="roadmap-header relative z-10 pt-24 pb-12 px-8 max-w-6xl mx-auto">
         <div className="flex items-center gap-3 mb-6">
           <div
             className="w-12 h-[1px]"
@@ -393,8 +304,8 @@ const HorizontalRoadmap = () => {
         </p>
       </div>
 
-      {/* Progress Bar with Walking Figure */}
-      <div className="relative z-10 px-8 max-w-6xl mx-auto mb-8">
+      {/* Progress Bar with Progress Video */}
+      <div className="relative z-10 px-8 max-w-6xl mx-auto mb-8 pt-12">
         {/* Step indicators */}
         <div className="flex items-center justify-between mb-3">
           {journeySteps.map((step, idx) => (
@@ -443,14 +354,44 @@ const HorizontalRoadmap = () => {
             />
           </div>
 
-          {/* Walking figure - moves along the bar */}
+          {/* Progress video - moves along the bar */}
           <div
-            className="absolute -top-10 w-8 h-12 transition-all duration-100 ease-out"
+            className="absolute -top-[4.25rem] h-20 w-28 overflow-hidden rounded-2xl shadow-[0_14px_34px_rgba(10,20,30,0.24)] transition-all duration-100 ease-out"
             style={{
-              left: `calc(${scrollProgress * 100}% - 16px)`,
+              left: `calc(${scrollProgress * 100}% - 56px)`,
+              background:
+                "linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(35, 48, 60, 0.58) 100%)",
+              backdropFilter: "blur(6px)",
             }}
           >
-            <WalkingFigure progress={scrollProgress} />
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(circle at 50% 0%, rgba(209, 176, 70, 0.18) 0%, transparent 58%)",
+              }}
+            />
+            <video
+              ref={progressVideoRef}
+              src={shouldLoadProgressVideo ? "/progress.mp4" : undefined}
+              muted
+              playsInline
+              preload="metadata"
+              className="pointer-events-none h-full w-full object-cover"
+              style={{
+                mixBlendMode: "multiply",
+                filter: "brightness(1.08) contrast(1.06) saturate(1.04)",
+                objectPosition: "center 44%",
+                transform: "scale(1.04)",
+                transformOrigin: "center center",
+                opacity: shouldLoadProgressVideo ? 1 : 0,
+                transition: "opacity 0.25s ease",
+              }}
+              onLoadedMetadata={(event) => {
+                event.currentTarget.currentTime = 0;
+                syncProgressVideo(scrollProgressRef.current);
+              }}
+            />
           </div>
 
           {/* Start label */}

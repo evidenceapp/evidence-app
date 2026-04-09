@@ -21,6 +21,14 @@ const HeroSection = ({ name, slogan, buttonText }: IHeroSection) => {
       // Logo badge entrance
       tl.fromTo(".hero-badge", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.8 });
 
+      // Mobile logo entrance
+      tl.fromTo(
+        ".hero-mobile-logo",
+        { opacity: 0, scale: 0.9, y: 16 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.7 },
+        "-=0.45"
+      );
+
       // Main title
       tl.fromTo(".hero-title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1 }, "-=0.4");
 
@@ -143,7 +151,40 @@ const HeroSection = ({ name, slogan, buttonText }: IHeroSection) => {
             />
           </div>
 
-          {/* Main Title */}
+          <div className="hero-mobile-logo lg:hidden relative mx-auto mb-8 h-28 w-28">
+            <div
+              className="absolute inset-0 rounded-[2rem]"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(245, 245, 245, 0.08) 0%, rgba(35, 48, 60, 0.6) 100%)",
+                border: "1px solid rgba(209, 176, 70, 0.24)",
+                boxShadow: "0 18px 40px rgba(10, 20, 30, 0.28)",
+                backdropFilter: "blur(10px)",
+              }}
+            />
+            <div
+              className="absolute inset-x-4 top-0 h-px"
+              style={{
+                background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.65), transparent)",
+              }}
+            />
+            <div
+              className="absolute inset-0 rounded-[2rem]"
+              style={{
+                background:
+                  "radial-gradient(circle at 50% 18%, rgba(209, 176, 70, 0.16) 0%, transparent 58%)",
+              }}
+            />
+            <Image
+              src="/logo-def.png"
+              alt="Logo"
+              fill
+              sizes="112px"
+              priority
+              className="object-contain p-4 drop-shadow-[0_10px_24px_rgba(10,20,30,0.3)]"
+            />
+          </div>
+
           <h1
             className="hero-title text-5xl md:text-6xl lg:text-7xl font-extralight mb-6 leading-tight"
             style={{ color: "#F5F5F5" }}
@@ -159,7 +200,6 @@ const HeroSection = ({ name, slogan, buttonText }: IHeroSection) => {
             ))}
           </h1>
 
-          {/* Decorative Line */}
           <div
             className="deco-line w-24 h-[2px] mb-8 mx-auto lg:mx-0"
             style={{
@@ -168,7 +208,6 @@ const HeroSection = ({ name, slogan, buttonText }: IHeroSection) => {
             }}
           />
 
-          {/* Slogan */}
           <p
             className="hero-slogan text-lg md:text-xl font-light mb-10 max-w-md mx-auto lg:mx-0"
             style={{ color: "rgba(245, 245, 245, 0.7)" }}
@@ -176,7 +215,6 @@ const HeroSection = ({ name, slogan, buttonText }: IHeroSection) => {
             Excelência em cuidado, tecnologia e resultados. Sua jornada de recuperação começa aqui.
           </p>
 
-          {/* CTA */}
           <button
             className="hero-cta group relative px-10 py-4 overflow-hidden transition-all duration-500"
             style={{
@@ -208,16 +246,15 @@ const HeroSection = ({ name, slogan, buttonText }: IHeroSection) => {
           </button>
         </div>
 
-        {/* Right - 3D Image Container */}
         <div 
-          className="hero-3d-image flex-1 relative h-[500px] lg:h-[600px] w-full max-w-2xl flex items-center justify-center"
+          className="hero-3d-image relative hidden h-[500px] w-full max-w-2xl flex-1 items-center justify-center lg:flex lg:h-[600px]"
           style={{
             perspective: "1000px",
           }}
         >
           <Image
-            src="/3d.png"
-            alt="Elemento 3D"
+            src="/logo-def.png"
+            alt="Logo"
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"
             priority
