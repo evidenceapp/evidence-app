@@ -129,11 +129,12 @@ export default function PrivacyPolicyPage() {
             <ul>
               <li>Nome de usuário para acesso ao sistema</li>
               <li>Nome de usuário do Instagram (opcional, informado pelo próprio usuário)</li>
+              <li>Foto de perfil enviada manualmente pelo próprio usuário (opcional)</li>
             </ul>
             <p className="mt-4">
-              Caso o usuário informe seu @ do Instagram, utilizamos um serviço público (unavatar.io) para
-              exibir a foto de perfil pública associada. <strong>Não acessamos nem armazenamos</strong> nenhuma
-              informação privada do Instagram, como e-mail, seguidores ou mensagens.
+              Caso o usuário envie uma foto de perfil, esse arquivo é armazenado no banco de dados em
+              formato base64 para exibição na plataforma. <strong>Não acessamos nem armazenamos</strong>
+              nenhuma informação privada do Instagram, como e-mail, seguidores ou mensagens.
             </p>
           </Section>
 

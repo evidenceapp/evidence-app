@@ -191,7 +191,7 @@ const AdminDash = ({ usersList, onRefresh }: AdminDashProps) => {
                       style={{ border: "2px solid rgba(209, 176, 70, 0.4)" }}
                     >
                       <Image
-                        src={`https://unavatar.io/instagram/${user.instagramUsername}`}
+                        src={user.instagramProfilePictureUrl || "/images/default-avatar.svg"}
                         alt={user.username}
                         fill
                         className="object-cover"

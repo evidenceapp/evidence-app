@@ -18,6 +18,7 @@ export async function GET(req: NextRequest) {
         select: {
           username: true,
           instagramUsername: true,
+          instagramProfilePictureUrl: true,
         },
       },
     },

@@ -27,6 +27,8 @@ const PostsSection = () => {
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
+  const getAvatarSrc = (avatarBase64?: string | null) => avatarBase64 || "/images/default-avatar.svg";
+
   useEffect(() => {
     if (!sectionRef.current) return;
     const ctx = gsap.context(() => {
@@ -242,7 +244,7 @@ const PostsSection = () => {
                     }}
                   >
                     <Image
-                      src={`https://unavatar.io/instagram/${username}`}
+                      src={getAvatarSrc(authorPost.author.instagramProfilePictureUrl)}
                       alt={username}
                       fill
                       className="object-cover"
@@ -299,7 +301,7 @@ const PostsSection = () => {
                     style={{ border: "2px solid rgba(209, 176, 70, 0.4)" }}
                   >
                     <Image
-                      src={`https://unavatar.io/instagram/${post.author.instagramUsername}`}
+                      src={getAvatarSrc(post.author.instagramProfilePictureUrl)}
                       alt={post.author.instagramUsername}
                       fill
                       className="object-cover"
@@ -421,7 +423,7 @@ const PostsSection = () => {
                 style={{ border: "2px solid rgba(209, 176, 70, 0.4)" }}
               >
                 <Image
-                  src={`https://unavatar.io/instagram/${selectedPost.author.instagramUsername}`}
+                  src={getAvatarSrc(selectedPost.author.instagramProfilePictureUrl)}
                   alt={selectedPost.author.instagramUsername}
                   fill
                   className="object-cover"

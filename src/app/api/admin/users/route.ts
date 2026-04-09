@@ -3,8 +3,10 @@ import { PrismaClient } from "@/generated/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { sanitizeInstagramUsername } from "@/app/lib/instagram";
 
 const prisma = new PrismaClient();
+const MAX_AVATAR_DATA_URL_LENGTH = 7 * 1024 * 1024;
 
 function getToken(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
@@ -29,6 +31,7 @@ export async function GET(req: NextRequest) {
       username: true,
       role: true,
       instagramUsername: true,
+      instagramProfilePictureUrl: true,
     },
   });
 
@@ -47,6 +50,7 @@ export async function GET(req: NextRequest) {
         id: true,
         username: true,
         instagramUsername: true,
+        instagramProfilePictureUrl: true,
       },
     });
     return NextResponse.json({ users, currentUser });
@@ -118,18 +122,55 @@ export async function PUT(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { id, username, password, instagramUsername } = body;
+  const { id, username, password, instagramUsername, instagramProfilePictureUrl } = body;
 
   // Users can only update their own profile, admins can update anyone
   if (decoded.role !== "admin" && decoded.userId !== id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const updateData: Record<string, string> = {};
+  const updateData: {
+    username?: string;
+    password?: string;
+    instagramUsername?: string | null;
+    instagramProfilePictureUrl?: string | null;
+  } = {};
 
   if (username) updateData.username = username;
   if (password) updateData.password = await bcrypt.hash(password, 10);
-  if (instagramUsername) updateData.instagramUsername = instagramUsername;
+  if (instagramUsername !== undefined) {
+    const sanitizedInstagramUsername = sanitizeInstagramUsername(instagramUsername);
+
+    if (!sanitizedInstagramUsername && instagramUsername) {
+      return NextResponse.json(
+        { error: "Instagram username inválido" },
+        { status: 400 }
+      );
+    }
+
+    if (!sanitizedInstagramUsername) {
+      updateData.instagramUsername = null;
+    } else {
+      updateData.instagramUsername = sanitizedInstagramUsername;
+    }
+  }
+
+  if (instagramProfilePictureUrl !== undefined) {
+    if (instagramProfilePictureUrl === null || instagramProfilePictureUrl === "") {
+      updateData.instagramProfilePictureUrl = null;
+    } else if (
+      typeof instagramProfilePictureUrl === "string" &&
+      instagramProfilePictureUrl.startsWith("data:image/") &&
+      instagramProfilePictureUrl.length <= MAX_AVATAR_DATA_URL_LENGTH
+    ) {
+      updateData.instagramProfilePictureUrl = instagramProfilePictureUrl;
+    } else {
+      return NextResponse.json(
+        { error: "Imagem de perfil inválida" },
+        { status: 400 }
+      );
+    }
+  }
 
   if (Object.keys(updateData).length === 0) {
     return NextResponse.json({ error: "No data to update" }, { status: 400 });

@@ -15,6 +15,7 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
           select: {
             username: true,
             instagramUsername: true,
+            instagramProfilePictureUrl: true,
           },
         },
       },
