@@ -426,11 +426,11 @@ const HorizontalRoadmap = () => {
         {journeySteps.map((step, index) => (
           <div
             key={index}
-            className="journey-card flex-shrink-0 w-[80vw] md:w-[500px] lg:w-[550px]"
+            className="journey-card flex-shrink-0 w-[74vw] sm:w-[80vw] md:w-[500px] lg:w-[550px]"
             style={{ transformStyle: "preserve-3d" }}
           >
             <div
-              className="card-inner relative h-[380px] md:h-[450px] p-6 md:p-10 flex flex-col justify-between transition-all duration-500 group overflow-hidden"
+              className="card-inner relative h-[340px] sm:h-[380px] md:h-[450px] p-5 sm:p-6 md:p-10 flex flex-col justify-between transition-all duration-500 group overflow-hidden"
               style={{
                 background:
                   activeCard === index
@@ -498,7 +498,7 @@ const HorizontalRoadmap = () => {
               <div className="flex items-start justify-between relative z-10">
                 <div className="flex flex-col">
                   <span
-                    className="text-7xl md:text-8xl font-extralight leading-none"
+                    className="text-6xl sm:text-7xl md:text-8xl font-extralight leading-none"
                     style={{
                       background:
                         "linear-gradient(180deg, rgba(209, 176, 70, 0.3) 0%, rgba(209, 176, 70, 0.1) 100%)",
@@ -513,7 +513,7 @@ const HorizontalRoadmap = () => {
                 {/* Stat Badge */}
                 <div className="text-right">
                   <div
-                    className="stat-value text-3xl md:text-4xl font-light mb-1 transition-transform"
+                    className="stat-value text-2xl sm:text-3xl md:text-4xl font-light mb-1 transition-transform"
                     style={{ color: "#D1B046" }}
                   >
                     {step.stat}
@@ -547,12 +547,12 @@ const HorizontalRoadmap = () => {
                   {step.subtitle}
                 </span>
 
-                <h3 className="text-2xl md:text-3xl font-light mb-4" style={{ color: "#F5F5F5" }}>
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-light mb-3 md:mb-4" style={{ color: "#F5F5F5" }}>
                   {step.title}
                 </h3>
 
                 <p
-                  className="text-sm md:text-base font-light leading-relaxed"
+                  className="text-xs sm:text-sm md:text-base font-light leading-relaxed"
                   style={{ color: "rgba(245, 245, 245, 0.6)" }}
                 >
                   {step.description}
@@ -602,9 +602,9 @@ const HorizontalRoadmap = () => {
         ))}
 
         {/* Final CTA Card */}
-        <div className="journey-card flex-shrink-0 w-[80vw] md:w-[450px] lg:w-[500px] mr-16">
+        <div className="journey-card flex-shrink-0 w-[74vw] sm:w-[80vw] md:w-[450px] lg:w-[500px] mr-16">
           <div
-            className="relative h-[380px] md:h-[450px] p-6 md:p-10 flex flex-col items-center justify-center text-center overflow-hidden group"
+            className="relative h-[340px] sm:h-[380px] md:h-[450px] p-5 sm:p-6 md:p-10 flex flex-col items-center justify-center text-center overflow-hidden group"
             style={{
               background:
                 "linear-gradient(145deg, rgba(209, 176, 70, 0.12) 0%, rgba(209, 176, 70, 0.03) 100%)",
@@ -643,7 +643,7 @@ const HorizontalRoadmap = () => {
             </span>
 
             <h3
-              className="relative z-10 text-3xl md:text-4xl font-extralight mb-6 leading-tight"
+              className="relative z-10 text-2xl sm:text-3xl md:text-4xl font-extralight mb-5 md:mb-6 leading-tight"
               style={{ color: "#F5F5F5" }}
             >
               Pronto para
@@ -663,7 +663,7 @@ const HorizontalRoadmap = () => {
             </h3>
 
             <p
-              className="relative z-10 text-sm font-light mb-8 max-w-xs"
+              className="relative z-10 text-xs sm:text-sm font-light mb-6 md:mb-8 max-w-xs"
               style={{ color: "rgba(245, 245, 245, 0.6)" }}
             >
               Agende sua avaliação e descubra como podemos ajudar você.
