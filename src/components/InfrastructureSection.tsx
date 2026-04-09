@@ -1,7 +1,7 @@
 "use client";
 
 import Image, { type StaticImageData } from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface InfrastructureItem {
   id: string;
@@ -19,10 +19,10 @@ const InfrastructureSection = ({ description, items }: InfrastructureSectionProp
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const autoAnimateIntervalsRef = useRef<Record<string, NodeJS.Timeout>>({});
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [activeMobileId, setActiveMobileId] = useState<string | null>(null);
   const resizeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Debounced resize handler
   useEffect(() => {
     const handleResize = () => {
       if (resizeTimeoutRef.current) {
@@ -44,7 +44,6 @@ const InfrastructureSection = ({ description, items }: InfrastructureSectionProp
     };
   }, []);
 
-  // Intersection Observer para lazy loading
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -65,38 +64,24 @@ const InfrastructureSection = ({ description, items }: InfrastructureSectionProp
     return () => observer.disconnect();
   }, []);
 
-  // Auto-animate simplificado para mobile
-  const startAutoAnimate = useCallback(
-    (id: string) => {
-      if (!isMobile) return;
-
-      const interval = setInterval(() => {
-        const card = document.getElementById(`card-${id}`);
-        if (!card) return;
-
-        card.classList.add("auto-reveal");
-        setTimeout(() => {
-          card.classList.remove("auto-reveal");
-        }, 1500);
-      }, 4000);
-
-      autoAnimateIntervalsRef.current[id] = interval;
-    },
-    [isMobile]
-  );
-
   useEffect(() => {
-    if (isMobile && isVisible) {
-      items.forEach((item) => startAutoAnimate(item.id));
-    } else {
-      Object.values(autoAnimateIntervalsRef.current).forEach(clearInterval);
-      autoAnimateIntervalsRef.current = {};
+    if (!isMobile || !isVisible || items.length === 0) {
+      setActiveMobileId(null);
+      return;
     }
 
+    let currentIndex = 0;
+    setActiveMobileId(items[currentIndex].id);
+
+    const interval = setInterval(() => {
+      currentIndex = (currentIndex + 1) % items.length;
+      setActiveMobileId(items[currentIndex].id);
+    }, 2200);
+
     return () => {
-      Object.values(autoAnimateIntervalsRef.current).forEach(clearInterval);
+      clearInterval(interval);
     };
-  }, [isMobile, isVisible, items, startAutoAnimate]);
+  }, [isMobile, isVisible, items]);
 
   return (
     <section
@@ -130,7 +115,6 @@ const InfrastructureSection = ({ description, items }: InfrastructureSectionProp
               {items.map((item, index) => (
                 <div
                   key={item.id}
-                  id={`card-${item.id}`}
                   className="infra-card group relative overflow-hidden cursor-pointer w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.34rem)]"
                   style={{
                     aspectRatio: "1 / 1.2",
@@ -141,14 +125,27 @@ const InfrastructureSection = ({ description, items }: InfrastructureSectionProp
                     boxShadow: "0 12px 30px rgba(10, 20, 30, 0.25)",
                     contain: "layout style paint",
                   }}
+                  onMouseEnter={() => {
+                    if (!isMobile) setHoveredId(item.id);
+                  }}
+                  onMouseLeave={() => {
+                    if (!isMobile) setHoveredId(null);
+                  }}
                 >
-                  {/* Sketch Image - Base Layer */}
                   {isVisible && (
                     <Image
-                      src={item.sketch}
-                      alt={`${item.title} sketch`}
+                      src={
+                        isMobile
+                          ? activeMobileId === item.id
+                            ? item.image
+                            : item.sketch
+                          : hoveredId === item.id
+                            ? item.image
+                            : item.sketch
+                      }
+                      alt={item.title}
                       fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      sizes="(max-width: 1080px) 100vw, (max-width: 1920px) 50vw, 33vw"
                       className="object-cover"
                       loading={index < 2 ? "eager" : "lazy"}
                       quality={75}
@@ -157,25 +154,14 @@ const InfrastructureSection = ({ description, items }: InfrastructureSectionProp
                     />
                   )}
 
-                  {/* Reveal Layer - Color Image */}
-                  <div className="reveal-layer absolute inset-0 pointer-events-none">
-                    {isVisible && (
-                      <Image
-                        src={item.image}
-                        alt={item.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        className="object-cover"
-                        loading={index < 2 ? "eager" : "lazy"}
-                        quality={75}
-                        placeholder="blur"
-                        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
-                      />
-                    )}
-                  </div>
-
                   {/* Title Overlay */}
-                  <div className="title-overlay absolute bottom-0 left-0 right-0 p-6">
+                  <div
+                    className={`title-overlay absolute bottom-0 left-0 right-0 p-6 transition-opacity duration-300 ${
+                      (isMobile ? activeMobileId === item.id : hoveredId === item.id)
+                        ? "opacity-100"
+                        : "opacity-0"
+                    }`}
+                  >
                     <h3 className="text-xl font-light" style={{ color: "#F5F5F5" }}>
                       {item.title}
                     </h3>
@@ -196,37 +182,12 @@ const InfrastructureSection = ({ description, items }: InfrastructureSectionProp
           transform: translateY(-4px);
         }
 
-        .reveal-layer {
-          clip-path: circle(0% at 100% 100%);
-          transition: clip-path 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @media (min-width: 768px) {
-          .infra-card:hover .reveal-layer {
-            clip-path: circle(150% at 100% 100%);
-          }
-
-          .infra-card:hover .title-overlay {
-            opacity: 1;
-          }
-        }
-
-        .infra-card.auto-reveal .reveal-layer {
-          clip-path: circle(150% at 100% 100%);
-        }
-
-        .infra-card.auto-reveal .title-overlay {
-          opacity: 1;
-        }
-
         .title-overlay {
-          opacity: 0;
           background: linear-gradient(
             180deg,
             rgba(30, 40, 50, 0.05) 0%,
             rgba(30, 40, 50, 0.82) 100%
           );
-          transition: opacity 0.3s ease;
         }
       `}</style>
     </section>
