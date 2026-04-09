@@ -305,7 +305,7 @@ const HorizontalRoadmap = () => {
       </div>
 
       {/* Progress Bar with Progress Video */}
-      <div className="relative z-10 px-8 max-w-6xl mx-auto mb-8 pt-12">
+      <div className="relative z-10 px-8 max-w-6xl mx-auto mb-8 pt-6 md:pt-12">
         {/* Step indicators */}
         <div className="flex items-center justify-between mb-3">
           {journeySteps.map((step, idx) => (
@@ -356,9 +356,10 @@ const HorizontalRoadmap = () => {
 
           {/* Progress video - moves along the bar */}
           <div
-            className="absolute -top-[4.25rem] h-20 w-28 overflow-hidden rounded-2xl shadow-[0_14px_34px_rgba(10,20,30,0.24)] transition-all duration-100 ease-out"
+            className="absolute -top-[3.85rem] h-16 w-20 overflow-hidden rounded-2xl shadow-[0_14px_34px_rgba(10,20,30,0.24)] transition-all duration-100 ease-out md:-top-[4.25rem] md:h-20 md:w-28"
             style={{
-              left: `calc(${scrollProgress * 100}% - 56px)`,
+              left: `${scrollProgress * 100}%`,
+              transform: "translateX(-50%)",
               background:
                 "linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(35, 48, 60, 0.58) 100%)",
               backdropFilter: "blur(6px)",
@@ -425,11 +426,11 @@ const HorizontalRoadmap = () => {
         {journeySteps.map((step, index) => (
           <div
             key={index}
-            className="journey-card flex-shrink-0 w-[85vw] md:w-[500px] lg:w-[550px]"
+            className="journey-card flex-shrink-0 w-[80vw] md:w-[500px] lg:w-[550px]"
             style={{ transformStyle: "preserve-3d" }}
           >
             <div
-              className="card-inner relative h-[420px] md:h-[450px] p-8 md:p-10 flex flex-col justify-between transition-all duration-500 group overflow-hidden"
+              className="card-inner relative h-[380px] md:h-[450px] p-6 md:p-10 flex flex-col justify-between transition-all duration-500 group overflow-hidden"
               style={{
                 background:
                   activeCard === index
@@ -601,9 +602,9 @@ const HorizontalRoadmap = () => {
         ))}
 
         {/* Final CTA Card */}
-        <div className="journey-card flex-shrink-0 w-[85vw] md:w-[450px] lg:w-[500px] mr-16">
+        <div className="journey-card flex-shrink-0 w-[80vw] md:w-[450px] lg:w-[500px] mr-16">
           <div
-            className="relative h-[420px] md:h-[450px] p-8 md:p-10 flex flex-col items-center justify-center text-center overflow-hidden group"
+            className="relative h-[380px] md:h-[450px] p-6 md:p-10 flex flex-col items-center justify-center text-center overflow-hidden group"
             style={{
               background:
                 "linear-gradient(145deg, rgba(209, 176, 70, 0.12) 0%, rgba(209, 176, 70, 0.03) 100%)",
