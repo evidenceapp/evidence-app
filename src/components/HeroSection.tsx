@@ -13,15 +13,6 @@ const HeroSection = ({ name, slogan, buttonText }: IHeroSection) => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Set perspective for 3D effects
-      gsap.set(".pilates-elements-container", {
-        perspective: 1000,
-      });
-
-      gsap.set(".pilates-element", {
-        transformStyle: "preserve-3d",
-      });
-
       const tl = gsap.timeline({
         defaults: { ease: "power3.out" },
       });
@@ -56,33 +47,34 @@ const HeroSection = ({ name, slogan, buttonText }: IHeroSection) => {
         "-=1"
       );
 
-      // 3D entrance for pilates elements - subtle and elegant
+      // 3D Image entrance and float animation
       tl.fromTo(
-        ".pilates-element",
-        {
-          opacity: 0,
-          rotateX: -40,
-          rotateY: 20,
-          z: -100,
-          scale: 0.9,
-        },
-        {
-          opacity: 1,
-          rotateX: 0,
-          rotateY: 0,
-          z: 0,
-          scale: 1,
-          duration: 1.2,
-          stagger: {
-            each: 0.12,
-            from: "random",
-          },
-          ease: "power2.out",
-        },
-        "-=0.8"
+        ".hero-3d-image",
+        { opacity: 0, scale: 0.9, rotateY: -10, rotateX: 5 },
+        { opacity: 1, scale: 1, rotateY: 0, rotateX: 0, duration: 0.8 },
+        "-=0.5"
       );
 
-      // Parallax on scroll
+      // Continuous floating animation for 3D image
+      gsap.to(".hero-3d-image", {
+        y: -25,
+        duration: 4,
+        ease: "sine.inOut",
+        repeat: -1,
+        yoyo: true,
+      });
+
+      // Subtle rotation for 3D effect
+      gsap.to(".hero-3d-image", {
+        rotateY: 3,
+        rotateX: -1,
+        duration: 6,
+        ease: "sine.inOut",
+        repeat: -1,
+        yoyo: true,
+      });
+
+      // Parallax on scroll for text content
       gsap.to(".hero-content", {
         y: -50,
         ease: "none",
@@ -94,8 +86,9 @@ const HeroSection = ({ name, slogan, buttonText }: IHeroSection) => {
         },
       });
 
-      gsap.to(".pilates-elements-container", {
-        y: -30,
+      // Parallax on scroll for 3D image
+      gsap.to(".hero-3d-image", {
+        y: -80,
         ease: "none",
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -214,93 +207,18 @@ const HeroSection = ({ name, slogan, buttonText }: IHeroSection) => {
           </button>
         </div>
 
-        {/* Right - Pilates Elements with 3D perspective */}
-        <div className="pilates-elements-container flex-1 relative h-[400px] lg:h-[500px] w-full max-w-lg">
-          {/* Silhouette of person on reformer */}
-          <div className="pilates-element absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <svg width="280" height="200" viewBox="0 0 280 200" fill="none" className="opacity-90">
-              {/* Background shape */}
-              <ellipse cx="140" cy="100" rx="120" ry="80" fill="#D1B046" opacity="0.15" />
-              {/* Person silhouette doing pilates */}
-              <path
-                d="M180 60C180 53.4 174.6 48 168 48C161.4 48 156 53.4 156 60C156 66.6 161.4 72 168 72C174.6 72 180 66.6 180 60Z"
-                fill="#D1B046"
-                opacity="0.8"
-              />
-              <path
-                d="M168 76C158 76 150 84 150 94V120L130 140H110C106 140 102 144 102 148C102 152 106 156 110 156H138L160 134V120L180 100V94C180 84 172 76 168 76Z"
-                fill="#D1B046"
-                opacity="0.8"
-              />
-              {/* Reformer base */}
-              <rect x="60" y="155" width="160" height="8" rx="4" fill="#D1B046" opacity="0.6" />
-              <rect x="70" y="163" width="4" height="20" rx="2" fill="#D1B046" opacity="0.4" />
-              <rect x="206" y="163" width="4" height="20" rx="2" fill="#D1B046" opacity="0.4" />
-            </svg>
-          </div>
-
-          {/* Pilates Ball - Top Right */}
-          <div className="pilates-element absolute top-8 right-8 lg:right-0">
-            <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-              <circle cx="40" cy="40" r="35" fill="url(#ballGradient)" opacity="0.9" />
-              <ellipse cx="30" cy="30" rx="12" ry="8" fill="white" opacity="0.2" />
-              <defs>
-                <linearGradient id="ballGradient" x1="10" y1="10" x2="70" y2="70">
-                  <stop stopColor="#E8D5A3" />
-                  <stop offset="1" stopColor="#C9A961" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
-
-          {/* Small Pilates Ball - Bottom Left */}
-          <div className="pilates-element absolute bottom-16 left-4 lg:left-0">
-            <svg width="50" height="50" viewBox="0 0 50 50" fill="none">
-              <circle cx="25" cy="25" r="22" fill="url(#ballGradient2)" opacity="0.85" />
-              <ellipse cx="18" cy="18" rx="8" ry="5" fill="white" opacity="0.15" />
-              <defs>
-                <linearGradient id="ballGradient2" x1="5" y1="5" x2="45" y2="45">
-                  <stop stopColor="#E07A5F" />
-                  <stop offset="1" stopColor="#C15A40" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
-
-          {/* Yoga Mat */}
-          <div className="pilates-element absolute bottom-8 left-1/2 transform -translate-x-1/2">
-            <svg width="160" height="40" viewBox="0 0 160 40" fill="none">
-              <rect x="0" y="8" width="160" height="24" rx="2" fill="#5B7B9A" opacity="0.8" />
-              <rect x="4" y="12" width="152" height="16" rx="1" fill="#4A6A89" opacity="0.6" />
-            </svg>
-          </div>
-
-          {/* Dumbbell */}
-          <div className="pilates-element absolute bottom-20 right-12 lg:right-4">
-            <svg width="60" height="24" viewBox="0 0 60 24" fill="none">
-              <rect x="20" y="10" width="20" height="4" rx="1" fill="#8B8B8B" opacity="0.8" />
-              <rect x="0" y="4" width="8" height="16" rx="2" fill="#6B6B6B" opacity="0.9" />
-              <rect x="8" y="6" width="6" height="12" rx="1" fill="#5B5B5B" opacity="0.9" />
-              <rect x="52" y="4" width="8" height="16" rx="2" fill="#6B6B6B" opacity="0.9" />
-              <rect x="46" y="6" width="6" height="12" rx="1" fill="#5B5B5B" opacity="0.9" />
-            </svg>
-          </div>
-
-          {/* Resistance Band */}
-          <div className="pilates-element absolute top-20 left-8">
-            <svg width="40" height="60" viewBox="0 0 40 60" fill="none">
-              <path
-                d="M8 5C8 5 32 20 32 30C32 40 8 55 8 55"
-                stroke="#C15A40"
-                strokeWidth="3"
-                strokeLinecap="round"
-                opacity="0.7"
-                fill="none"
-              />
-              <circle cx="8" cy="5" r="4" fill="#C15A40" opacity="0.8" />
-              <circle cx="8" cy="55" r="4" fill="#C15A40" opacity="0.8" />
-            </svg>
-          </div>
+        {/* Right - 3D Image Container */}
+        <div 
+          className="hero-3d-image flex-1 relative h-[500px] lg:h-[600px] w-full max-w-2xl flex items-center justify-center"
+          style={{
+            perspective: "1000px",
+          }}
+        >
+          <img
+            src="/3d.png"
+            alt="3D Element"
+            className="w-full h-full object-contain drop-shadow-2xl"
+          />
         </div>
       </div>
     </section>
