@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useEffect } from "react";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import WhatsappFloatingButton from "@/components/WhatsappFloatingButton";
@@ -38,7 +39,34 @@ const PostsSection = dynamic(() => import("@/components/PostsSection"), {
 });
 const Footer = dynamic(() => import("@/components/Footer"));
 
+const infrastructureImagesToPreload = [
+  sketch1,
+  sketch2,
+  sketch3,
+  sketch4,
+  sketch5,
+  image1,
+  image2,
+  image3,
+  image4,
+  image5,
+];
+
 export default function HomePage() {
+  useEffect(() => {
+    const preloaders = infrastructureImagesToPreload.map((asset) => {
+      const img = new window.Image();
+      img.src = asset.src;
+      return img;
+    });
+
+    return () => {
+      preloaders.forEach((img) => {
+        img.src = "";
+      });
+    };
+  }, []);
+
   return (
     <div>
       <Header />

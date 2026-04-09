@@ -20,7 +20,6 @@ const InfrastructureSection = ({ description, items }: InfrastructureSectionProp
   const [isMobile, setIsMobile] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [activeMobileId, setActiveMobileId] = useState<string | null>(null);
   const resizeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -63,25 +62,6 @@ const InfrastructureSection = ({ description, items }: InfrastructureSectionProp
 
     return () => observer.disconnect();
   }, []);
-
-  useEffect(() => {
-    if (!isMobile || !isVisible || items.length === 0) {
-      setActiveMobileId(null);
-      return;
-    }
-
-    let currentIndex = 0;
-    setActiveMobileId(items[currentIndex].id);
-
-    const interval = setInterval(() => {
-      currentIndex = (currentIndex + 1) % items.length;
-      setActiveMobileId(items[currentIndex].id);
-    }, 2200);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [isMobile, isVisible, items]);
 
   return (
     <section
@@ -136,9 +116,7 @@ const InfrastructureSection = ({ description, items }: InfrastructureSectionProp
                     <Image
                       src={
                         isMobile
-                          ? activeMobileId === item.id
-                            ? item.image
-                            : item.sketch
+                          ? item.image
                           : hoveredId === item.id
                             ? item.image
                             : item.sketch
@@ -154,10 +132,9 @@ const InfrastructureSection = ({ description, items }: InfrastructureSectionProp
                     />
                   )}
 
-                  {/* Title Overlay */}
                   <div
                     className={`title-overlay absolute bottom-0 left-0 right-0 p-6 transition-opacity duration-300 ${
-                      (isMobile ? activeMobileId === item.id : hoveredId === item.id)
+                      (isMobile ? true : hoveredId === item.id)
                         ? "opacity-100"
                         : "opacity-0"
                     }`}
