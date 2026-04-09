@@ -2,6 +2,7 @@
 
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 
 import { IHeroSection } from "@/interfaces";
@@ -214,10 +215,13 @@ const HeroSection = ({ name, slogan, buttonText }: IHeroSection) => {
             perspective: "1000px",
           }}
         >
-          <img
+          <Image
             src="/3d.png"
-            alt="3D Element"
-            className="w-full h-full object-contain drop-shadow-2xl"
+            alt="Elemento 3D"
+            fill
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            priority
+            className="object-contain drop-shadow-2xl"
           />
         </div>
       </div>

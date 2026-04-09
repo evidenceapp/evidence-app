@@ -1,11 +1,7 @@
 "use client";
 
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
 import Image, { type StaticImageData } from "next/image";
-import { useCallback, useEffect, useRef } from "react";
-
-gsap.registerPlugin(ScrollTrigger);
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface InfrastructureItem {
   id: string;
@@ -21,144 +17,86 @@ interface InfrastructureSectionProps {
 
 const InfrastructureSection = ({ description, items }: InfrastructureSectionProps) => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const revealLayerRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const isMobileRef = useRef(false);
-  const autoAnimateTimeoutsRef = useRef<Record<string, NodeJS.Timeout>>({});
+  const [isMobile, setIsMobile] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const autoAnimateIntervalsRef = useRef<Record<string, NodeJS.Timeout>>({});
+  const resizeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const scheduleAutoAnimate = useCallback((id: string) => {
-    if (autoAnimateTimeoutsRef.current[id]) {
-      clearTimeout(autoAnimateTimeoutsRef.current[id]);
-    }
-
-    const layer = revealLayerRefs.current[id];
-    if (!layer) return;
-
-    gsap.killTweensOf([layer]);
-    gsap.to(layer, {
-      clipPath: "circle(150% at 100% 100%)",
-      duration: 0.4,
-      ease: "power2.out",
-    });
-
-    autoAnimateTimeoutsRef.current[id] = setTimeout(() => {
-      gsap.killTweensOf([layer]);
-      gsap.to(layer, {
-        clipPath: "circle(0% at 100% 100%)",
-        duration: 0.35,
-        ease: "power2.in",
-      });
-
-      autoAnimateTimeoutsRef.current[id] = setTimeout(() => {
-        scheduleAutoAnimate(id);
-      }, 2500);
-    }, 1800);
-  }, []);
-
+  // Debounced resize handler
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".infra-title",
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 80%",
-            end: "top 50%",
-            scrub: 0.5,
-          },
-        }
-      );
-
-      gsap.fromTo(
-        ".infra-description",
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          delay: 0.2,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 80%",
-            end: "top 50%",
-            scrub: 0.5,
-          },
-        }
-      );
-
-      gsap.fromTo(
-        ".infra-card",
-        { opacity: 0, y: 50, scale: 0.95 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.6,
-          stagger: 0.1,
-          scrollTrigger: {
-            trigger: ".infra-grid",
-            start: "top 80%",
-            end: "top 40%",
-            scrub: 0.5,
-          },
-        }
-      );
-    }, sectionRef);
-
-    const checkMobile = () => {
-      isMobileRef.current = window.innerWidth < 768;
-      if (isMobileRef.current) {
-        items.forEach((item) => {
-          scheduleAutoAnimate(item.id);
-        });
-      } else {
-        Object.values(autoAnimateTimeoutsRef.current).forEach((timeout) => clearTimeout(timeout));
-        autoAnimateTimeoutsRef.current = {};
+    const handleResize = () => {
+      if (resizeTimeoutRef.current) {
+        clearTimeout(resizeTimeoutRef.current);
       }
+      resizeTimeoutRef.current = setTimeout(() => {
+        setIsMobile(window.innerWidth < 768);
+      }, 300);
     };
 
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
+    setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize, { passive: true });
 
     return () => {
-      ctx.revert();
-      window.removeEventListener("resize", checkMobile);
-      Object.values(autoAnimateTimeoutsRef.current).forEach((timeout) => clearTimeout(timeout));
+      window.removeEventListener("resize", handleResize);
+      if (resizeTimeoutRef.current) {
+        clearTimeout(resizeTimeoutRef.current);
+      }
     };
-  }, [items, scheduleAutoAnimate]);
+  }, []);
 
-  const handleCardMouseEnter = (id: string) => {
-    if (isMobileRef.current) return;
+  // Intersection Observer para lazy loading
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "100px" }
+    );
 
-    const layer = revealLayerRefs.current[id];
-    if (!layer) return;
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
 
-    gsap.killTweensOf([layer]);
-    gsap.to(layer, {
-      clipPath: "circle(150% at 100% 100%)",
-      duration: 0.4,
-      ease: "power2.out",
-      overwrite: "auto",
-    });
-  };
+    return () => observer.disconnect();
+  }, []);
 
-  const handleCardMouseLeave = (id: string) => {
-    if (isMobileRef.current) return;
+  // Auto-animate simplificado para mobile
+  const startAutoAnimate = useCallback(
+    (id: string) => {
+      if (!isMobile) return;
 
-    const layer = revealLayerRefs.current[id];
-    if (!layer) return;
+      const interval = setInterval(() => {
+        const card = document.getElementById(`card-${id}`);
+        if (!card) return;
 
-    gsap.killTweensOf([layer]);
-    gsap.to(layer, {
-      clipPath: "circle(0% at 100% 100%)",
-      duration: 0.35,
-      ease: "power2.in",
-      overwrite: "auto",
-    });
-  };
+        card.classList.add("auto-reveal");
+        setTimeout(() => {
+          card.classList.remove("auto-reveal");
+        }, 1500);
+      }, 4000);
+
+      autoAnimateIntervalsRef.current[id] = interval;
+    },
+    [isMobile]
+  );
+
+  useEffect(() => {
+    if (isMobile && isVisible) {
+      items.forEach((item) => startAutoAnimate(item.id));
+    } else {
+      Object.values(autoAnimateIntervalsRef.current).forEach(clearInterval);
+      autoAnimateIntervalsRef.current = {};
+    }
+
+    return () => {
+      Object.values(autoAnimateIntervalsRef.current).forEach(clearInterval);
+    };
+  }, [isMobile, isVisible, items, startAutoAnimate]);
 
   return (
     <section
@@ -181,18 +119,19 @@ const InfrastructureSection = ({ description, items }: InfrastructureSectionProp
           <div className="relative px-4 py-2 md:px-6 lg:px-8">
             <div className="text-center mb-16">
               <p
-                className="infra-description text-base md:text-lg font-light max-w-2xl mx-auto"
+                className="text-base md:text-lg font-light max-w-2xl mx-auto"
                 style={{ color: "rgba(245, 245, 245, 0.65)" }}
               >
                 {description}
               </p>
             </div>
 
-            <div className="infra-grid flex flex-wrap justify-center gap-8">
-              {items.map((item) => (
+            <div className="flex flex-wrap justify-center gap-8">
+              {items.map((item, index) => (
                 <div
                   key={item.id}
-                  className="infra-card group relative overflow-hidden cursor-pointer transition-all duration-500 w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.34rem)]"
+                  id={`card-${item.id}`}
+                  className="infra-card group relative overflow-hidden cursor-pointer w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.34rem)]"
                   style={{
                     aspectRatio: "1 / 1.2",
                     background:
@@ -200,47 +139,43 @@ const InfrastructureSection = ({ description, items }: InfrastructureSectionProp
                     border: "1px solid rgba(209, 176, 70, 0.18)",
                     borderRadius: "10px",
                     boxShadow: "0 12px 30px rgba(10, 20, 30, 0.25)",
+                    contain: "layout style paint",
                   }}
-                  onMouseEnter={() => handleCardMouseEnter(item.id)}
-                  onMouseLeave={() => handleCardMouseLeave(item.id)}
                 >
-                  <Image
-                    src={item.sketch}
-                    alt={`${item.title} sketch`}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover"
-                  />
-
-                  <div
-                    ref={(el) => {
-                      revealLayerRefs.current[item.id] = el;
-                    }}
-                    className="pointer-events-none absolute inset-0"
-                    style={{
-                      clipPath: "circle(0% at 100% 100%)",
-                      WebkitClipPath: "circle(0% at 100% 100%)",
-                      transform: "translateZ(0)",
-                      willChange: "clip-path",
-                    }}
-                  >
+                  {/* Sketch Image - Base Layer */}
+                  {isVisible && (
                     <Image
-                      src={item.image}
-                      alt={`${item.title} ambiente`}
+                      src={item.sketch}
+                      alt={`${item.title} sketch`}
                       fill
-                      sizes="(max-width: 1080px) 100vw, (max-width: 1920px) 50vw, 33vw"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="object-cover"
+                      loading={index < 2 ? "eager" : "lazy"}
+                      quality={75}
+                      placeholder="blur"
+                      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
                     />
-                    <span className="sr-only">{item.title}</span>
+                  )}
+
+                  {/* Reveal Layer - Color Image */}
+                  <div className="reveal-layer absolute inset-0 pointer-events-none">
+                    {isVisible && (
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover"
+                        loading={index < 2 ? "eager" : "lazy"}
+                        quality={75}
+                        placeholder="blur"
+                        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+                      />
+                    )}
                   </div>
 
-                  <div
-                    className="absolute bottom-0 left-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    style={{
-                      background:
-                        "linear-gradient(180deg, rgba(30, 40, 50, 0.05) 0%, rgba(30, 40, 50, 0.82) 100%)",
-                    }}
-                  >
+                  {/* Title Overlay */}
+                  <div className="title-overlay absolute bottom-0 left-0 right-0 p-6">
                     <h3 className="text-xl font-light" style={{ color: "#F5F5F5" }}>
                       {item.title}
                     </h3>
@@ -251,6 +186,49 @@ const InfrastructureSection = ({ description, items }: InfrastructureSectionProp
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        .infra-card {
+          transition: transform 0.3s ease;
+        }
+
+        .infra-card:hover {
+          transform: translateY(-4px);
+        }
+
+        .reveal-layer {
+          clip-path: circle(0% at 100% 100%);
+          transition: clip-path 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media (min-width: 768px) {
+          .infra-card:hover .reveal-layer {
+            clip-path: circle(150% at 100% 100%);
+          }
+
+          .infra-card:hover .title-overlay {
+            opacity: 1;
+          }
+        }
+
+        .infra-card.auto-reveal .reveal-layer {
+          clip-path: circle(150% at 100% 100%);
+        }
+
+        .infra-card.auto-reveal .title-overlay {
+          opacity: 1;
+        }
+
+        .title-overlay {
+          opacity: 0;
+          background: linear-gradient(
+            180deg,
+            rgba(30, 40, 50, 0.05) 0%,
+            rgba(30, 40, 50, 0.82) 100%
+          );
+          transition: opacity 0.3s ease;
+        }
+      `}</style>
     </section>
   );
 };
